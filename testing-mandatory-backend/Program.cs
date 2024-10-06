@@ -1,4 +1,7 @@
 
+using MySql.Data.MySqlClient;
+using testing_mandatory_backend.Repositories;
+
 namespace testing_mandatory_backend
 {
     public class Program
@@ -8,6 +11,21 @@ namespace testing_mandatory_backend
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+
+            // Add scoped MySQL connection (new db connection for each request)
+            builder.Services.AddScoped<MySqlConnection>(serviceProvider =>
+            {
+                var config = serviceProvider.GetRequiredService<IConfiguration>();
+                string? connectionString = config.GetConnectionString("dev");
+                var connection = new MySqlConnection(connectionString);
+                connection.Open();
+                return connection;
+            });
+
+            // Add inject PostalCodeRepository wherever it is needed
+            builder.Services.AddScoped<IPostalCodeRepository, PostalCodeRepository>();
+
+            builder.Services.AddScoped<FakeAddressGenerator>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
