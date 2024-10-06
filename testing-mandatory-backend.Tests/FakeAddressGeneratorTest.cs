@@ -1,4 +1,5 @@
 ﻿using Moq;
+using Org.BouncyCastle.Asn1;
 using System.Text.RegularExpressions;
 using testing_mandatory_backend.Repositories;
 
@@ -7,11 +8,20 @@ namespace testing_mandatory_backend.Tests
     public class FakeAddressGeneratorTest
     {
         private readonly List<FakeAddress> fakeAddresses = [];
+        private readonly List<(string postalCode, string townName)> postalCodesAndTowns;
         public FakeAddressGeneratorTest()
         {
+            postalCodesAndTowns = [
+                    ("1234", "TestTown"),
+                    ("3456", "AnotherTown"),
+                    ("3456", "AnotherTown"),
+                    ("3456", "AnotherTown"),
+
+                    ];
+
             var mockPostalCodeRepository = new Mock<IPostalCodeRepository>();
             mockPostalCodeRepository.Setup(repo => repo.GetPostalCodesAndTowns())
-                .Returns([("1234", "TestTown")]);
+                .Returns(postalCodesAndTowns);
 
             FakeAddressGenerator generator = new(mockPostalCodeRepository.Object);
 
@@ -121,6 +131,16 @@ namespace testing_mandatory_backend.Tests
             fakeAddresses.ForEach(fakeAddress =>
             {
                 Assert.Matches(expectedPattern, fakeAddress.Floor);
+            });
+        }
+
+        [Fact]
+        public void GeneratedPostalCodeAndTown_AlwaysMatches_Expected()
+        {
+            fakeAddresses.ForEach(fakeAddress =>
+            {
+                var expectePostalCodeAndTownName = (fakeAddress.PostalCode, fakeAddress.TownName);
+                Assert.Contains(expectePostalCodeAndTownName, postalCodesAndTowns);
             });
         }
     }
