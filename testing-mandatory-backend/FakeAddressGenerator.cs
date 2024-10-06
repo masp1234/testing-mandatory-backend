@@ -8,7 +8,7 @@ namespace testing_mandatory_backend
         private readonly IPostalCodeRepository postalCodeRepository;
         private readonly char[] letters = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M' };
 
-        public FakeAddressGenerator(IPostalCodeRepository postalCodeRepository, Random random = null)
+        public FakeAddressGenerator(IPostalCodeRepository postalCodeRepository, Random? random = null)
         {
             this.postalCodeRepository = postalCodeRepository;
             this.random = random ?? new Random();
@@ -16,12 +16,36 @@ namespace testing_mandatory_backend
 
         public FakeAddress GenerateFakeAddress()
         {
+
             string number = GenerateNumber();
             string door = GenerateDoor();
             string floor = GenerateFloor();
             (string postalCode, string townName) = GeneratePostalCodeAndTownName();
+            string street = GenerateStreet();
 
-            return new FakeAddress(number, door, floor, postalCode, townName);
+            return new FakeAddress(street, number, door, floor, postalCode, townName);
+        }
+        private string GenerateStreet()
+        {
+            string street = "";
+            string allowedCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅabcdefghijklmnopqrstuvwxyzæøå ";
+            int numberOfCharacters = random.Next(2, 101);
+
+            for (int i = 0; i < numberOfCharacters; i++)
+            {
+                bool characterIsASpace = true;
+                while (characterIsASpace)
+                {
+                    char tempChar = allowedCharacters[random.Next(allowedCharacters.Length)];
+                    if (tempChar.ToString() != " ")
+                    {
+                        street += tempChar;
+                        characterIsASpace = false;
+                    }
+                }
+            }
+
+            return street;
         }
 
         private string GenerateNumber()
@@ -91,8 +115,17 @@ namespace testing_mandatory_backend
         private (string postalCode, string townName) GeneratePostalCodeAndTownName()
         {
             var postalCodes = postalCodeRepository.GetPostalCodesAndTowns();
+            if (postalCodes.Count == 0)
+            {
+                throw new Exception("No postalcodes were found.");
+            }
             int randomIndex = random.Next(postalCodes.Count);
-            return postalCodes[randomIndex];
+            (string postalCode, string townName) = postalCodes[randomIndex];
+            if (postalCode == null || townName == null)
+            {
+                throw new Exception("Postal code or town name missing.");
+            }
+            return (postalCode, townName);
         }
     }
 }
