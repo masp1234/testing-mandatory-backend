@@ -1,34 +1,15 @@
 ﻿using Moq;
-using Org.BouncyCastle.Asn1;
 using System.Text.RegularExpressions;
 using testing_mandatory_backend.Repositories;
 
 namespace testing_mandatory_backend.Tests
 {
-    public class FakeAddressGeneratorTest
+    public class FakeAddressGeneratorTest: IClassFixture<FakeAddressGeneratorFixture>
     {
-        private readonly List<FakeAddress> fakeAddresses = [];
-        private readonly List<(string postalCode, string townName)> postalCodesAndTowns;
-        public FakeAddressGeneratorTest()
+        private readonly FakeAddressGeneratorFixture _fixture;
+        public FakeAddressGeneratorTest(FakeAddressGeneratorFixture fixture)
         {
-            postalCodesAndTowns = [
-                    ("1234", "TestTown"),
-                    ("3456", "AnotherTown"),
-                    ("3456", "AnotherTown"),
-                    ("3456", "AnotherTown"),
-
-                    ];
-
-            var mockPostalCodeRepository = new Mock<IPostalCodeRepository>();
-            mockPostalCodeRepository.Setup(repo => repo.GetPostalCodesAndTowns())
-                .Returns(postalCodesAndTowns);
-
-            FakeAddressGenerator generator = new(mockPostalCodeRepository.Object);
-
-            for (int i = 0; i < 1000; i++)
-            {
-                fakeAddresses.Add(generator.GenerateFakeAddress());
-            }
+            _fixture = fixture;
         }
         [Theory]
         [InlineData(0, "QRØiØåB", "726", "h-558", "90")]
@@ -69,15 +50,17 @@ namespace testing_mandatory_backend.Tests
                 .Setup(repo => repo.GetPostalCodesAndTowns())
                 .Returns([]);
             FakeAddressGenerator generator = new(mockPostalCodeRepository.Object);
-
             Assert.Throws<Exception>(() => generator.GenerateFakeAddress());
         }
 
         [Theory]
+        [InlineData("1111", null)]
         [InlineData(null, "Glostrup")]
         [InlineData(null, null)]
-        [InlineData("2000", null)]
-        public void GenerateFakeAddress_ThrowsException_When_PostalCodeOrTownName_IsNull(string postalCode, string townName)
+        [InlineData("1111", "")]
+        [InlineData("", "Glostrup")]
+        [InlineData("", "")]
+        public void GenerateFakeAddress_ThrowsException_When_PostalCodeOrTownName_IsMissing(string postalCode, string townName)
         {
             var mockPostalCodeRepository = new Mock<IPostalCodeRepository>();
 
@@ -92,7 +75,7 @@ namespace testing_mandatory_backend.Tests
         [Fact]
         public void GeneratedNumber_AlwaysIn_ExpectedRange()
         {
-            fakeAddresses.ForEach(fakeAddress =>
+            _fixture.FakeAddresses.ForEach(fakeAddress =>
             {
                 int number = int.Parse(Regex.Replace(fakeAddress.Number, "[^0-9]", ""));
 
@@ -105,7 +88,7 @@ namespace testing_mandatory_backend.Tests
         {
             string expectedPattern = "^[A-Za-zÆØÅæøå ]+$";
 
-            fakeAddresses.ForEach(fakeAddress =>
+            _fixture.FakeAddresses.ForEach(fakeAddress =>
             {
                 Assert.Matches(expectedPattern, fakeAddress.Street);
             });
@@ -117,7 +100,7 @@ namespace testing_mandatory_backend.Tests
             // Matching one of the 3 different door patterns (separated by "|")
             string expectedPattern = @"^(th|mf|tv|\d{1,2}|[a-z]-?\d{1,3})$";
 
-            fakeAddresses.ForEach(fakeAddress =>
+            _fixture.FakeAddresses.ForEach(fakeAddress =>
             {
                 Assert.Matches(expectedPattern, fakeAddress.Door);
             });
@@ -128,7 +111,7 @@ namespace testing_mandatory_backend.Tests
         {
             string expectedPattern = "^(st|[1-9][0-9]?)$";
 
-            fakeAddresses.ForEach(fakeAddress =>
+            _fixture.FakeAddresses.ForEach(fakeAddress =>
             {
                 Assert.Matches(expectedPattern, fakeAddress.Floor);
             });
@@ -137,10 +120,10 @@ namespace testing_mandatory_backend.Tests
         [Fact]
         public void GeneratedPostalCodeAndTown_AlwaysMatches_Expected()
         {
-            fakeAddresses.ForEach(fakeAddress =>
+            _fixture.FakeAddresses.ForEach(fakeAddress =>
             {
                 var expectePostalCodeAndTownName = (fakeAddress.PostalCode, fakeAddress.TownName);
-                Assert.Contains(expectePostalCodeAndTownName, postalCodesAndTowns);
+                Assert.Contains(expectePostalCodeAndTownName, _fixture.PostalCodesAndTowns);
             });
         }
     }

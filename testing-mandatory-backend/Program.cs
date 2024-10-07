@@ -12,11 +12,19 @@ namespace testing_mandatory_backend
 
             // Add services to the container.
 
+            // Load environment variables depending on the current environment
+            var env = builder.Environment.EnvironmentName;
+            var config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                // This will load appsettings.Test.json when in Test environment
+                .AddJsonFile($"appsettings.{env}.json", optional: true) 
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .Build();
+
             // Add scoped MySQL connection (new db connection for each request)
             builder.Services.AddScoped<MySqlConnection>(serviceProvider =>
             {
-                var config = serviceProvider.GetRequiredService<IConfiguration>();
-                string? connectionString = config.GetConnectionString("dev");
+                string? connectionString = config.GetConnectionString(env == "Test" ? "TestDatabase" : "dev");
                 var connection = new MySqlConnection(connectionString);
                 connection.Open();
                 return connection;

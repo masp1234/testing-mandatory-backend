@@ -4,14 +4,14 @@ namespace testing_mandatory_backend
 {
     public class FakeAddressGenerator
     {
-        private readonly Random random;
-        private readonly IPostalCodeRepository postalCodeRepository;
-        private readonly char[] letters = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M' };
+        private readonly Random _random;
+        private readonly IPostalCodeRepository _postalCodeRepository;
+        private readonly char[] _letters = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M' };
 
         public FakeAddressGenerator(IPostalCodeRepository postalCodeRepository, Random? random = null)
         {
-            this.postalCodeRepository = postalCodeRepository;
-            this.random = random ?? new Random();
+            this._postalCodeRepository = postalCodeRepository;
+            this._random = random ?? new Random();
         }
 
         public FakeAddress GenerateFakeAddress()
@@ -29,14 +29,14 @@ namespace testing_mandatory_backend
         {
             string street = "";
             string allowedCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅabcdefghijklmnopqrstuvwxyzæøå ";
-            int numberOfCharacters = random.Next(2, 101);
+            int numberOfCharacters = _random.Next(2, 101);
 
             for (int i = 0; i < numberOfCharacters; i++)
             {
                 bool characterIsASpace = true;
                 while (characterIsASpace)
                 {
-                    char tempChar = allowedCharacters[random.Next(allowedCharacters.Length)];
+                    char tempChar = allowedCharacters[_random.Next(allowedCharacters.Length)];
                     if (tempChar.ToString() != " ")
                     {
                         street += tempChar;
@@ -50,8 +50,8 @@ namespace testing_mandatory_backend
 
         private string GenerateNumber()
         {
-            string numberString = random.Next(1, 1000).ToString();
-            int optionalLetter = random.Next(0, 2);
+            string numberString = _random.Next(1, 1000).ToString();
+            int optionalLetter = _random.Next(0, 2);
             if (optionalLetter == 0)
             {
                 numberString += GetRandomLetter();
@@ -61,7 +61,7 @@ namespace testing_mandatory_backend
 
         private string GenerateDoor()
         {
-            int randomFormat = random.Next(0, 3);
+            int randomFormat = _random.Next(0, 3);
 
             string doorString = "";
 
@@ -69,21 +69,21 @@ namespace testing_mandatory_backend
             {
                 case 0:
                     string[] doorFormats = { "th", "mf", "tv" };
-                    doorString += doorFormats[random.Next(0, doorFormats.Length)];
+                    doorString += doorFormats[_random.Next(0, doorFormats.Length)];
                     break;
                 case 1:
-                    int numberBetween0And50 = random.Next(1, 51);
+                    int numberBetween0And50 = _random.Next(1, 51);
                     doorString += numberBetween0And50.ToString();
                     break;
                 case 2:
                     doorString += GetRandomLetter().ToString().ToLower();
-                    int optionalDash = random.Next(0, 2);
+                    int optionalDash = _random.Next(0, 2);
                     if (optionalDash == 0)
                     {
                         doorString += "-";
                     }
 
-                    doorString += random.Next(1, 999).ToString();
+                    doorString += _random.Next(1, 999).ToString();
                     break;
 
             }
@@ -93,7 +93,7 @@ namespace testing_mandatory_backend
         private string GenerateFloor()
         {
             string floor = "";
-            int randomFloor = random.Next(0, 100);
+            int randomFloor = _random.Next(0, 100);
             if (randomFloor == 0)
             {
                 floor = "st";
@@ -108,20 +108,20 @@ namespace testing_mandatory_backend
 
         private char GetRandomLetter()
         {
-            int randomLetterIndex = random.Next(0, this.letters.Length);
-            return this.letters[randomLetterIndex];
+            int randomLetterIndex = _random.Next(0, this._letters.Length);
+            return this._letters[randomLetterIndex];
         }
 
         private (string postalCode, string townName) GeneratePostalCodeAndTownName()
         {
-            var postalCodes = postalCodeRepository.GetPostalCodesAndTowns();
+            var postalCodes = _postalCodeRepository.GetPostalCodesAndTowns();
             if (postalCodes.Count == 0)
             {
                 throw new Exception("No postalcodes were found.");
             }
-            int randomIndex = random.Next(postalCodes.Count);
+            int randomIndex = _random.Next(postalCodes.Count);
             (string postalCode, string townName) = postalCodes[randomIndex];
-            if (postalCode == null || townName == null)
+            if (string.IsNullOrEmpty(postalCode) || string.IsNullOrEmpty(townName))
             {
                 throw new Exception("Postal code or town name missing.");
             }
