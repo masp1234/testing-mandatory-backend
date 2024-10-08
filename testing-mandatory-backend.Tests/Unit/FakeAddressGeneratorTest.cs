@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using testing_mandatory_backend.Models;
 using testing_mandatory_backend.Repositories;
 using testing_mandatory_backend.Services;
+using Xunit;
 
 namespace testing_mandatory_backend.Tests
 {

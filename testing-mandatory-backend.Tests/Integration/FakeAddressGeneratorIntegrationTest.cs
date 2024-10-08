@@ -1,6 +1,7 @@
 ﻿using testing_mandatory_backend.Models;
 using testing_mandatory_backend.Repositories;
 using testing_mandatory_backend.Services;
+using Xunit;
 
 [Collection("Database Collection")]
 public class FakeAddressGeneratorIntegrationTest
