@@ -1,12 +1,17 @@
 
+namespace testing_mandatory_backend;
+using testing_mandatory_backend.Repositories;
+using testing_mandatory_backend.Services;
+using MySql.Data.MySqlClient;
 
+
+public class Program
 {
-    public static void Main()
+    public static void Main(string[] args)
     {
         PhoneNumberGenerator generator = new PhoneNumberGenerator();
         try
         {
-phone_number_generator
             // Generate a phone number with a specific prefix
             Console.WriteLine("Generated Phone Number: " + generator.GeneratePhoneNumber("342"));
 
@@ -19,7 +24,7 @@ phone_number_generator
             var config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 // This will load appsettings.Test.json when in Test environment
-                .AddJsonFile($"appsettings.{env}.json", optional: true) 
+                .AddJsonFile($"appsettings.{env}.json", optional: true)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
 
@@ -55,11 +60,9 @@ phone_number_generator
 
             app.UseAuthorization();
 
-
             app.MapControllers();
 
             app.Run();
-
         }
         catch (ArgumentException ex)
         {

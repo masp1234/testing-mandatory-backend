@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace testing_mandatory_backend.Service;
+namespace testing_mandatory_backend.Services;
 
 public class PhoneNumberGenerator
 {
