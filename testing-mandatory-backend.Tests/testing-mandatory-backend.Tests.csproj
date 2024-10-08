@@ -1,24 +1,37 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <!-- Target framework for the test project -->
     <TargetFramework>net8.0</TargetFramework>
-    <RootNamespace>testing_mandatory_backend.Tests</RootNamespace>
+
+    <!-- Namespace for the test project -->
+    <RootNamespace>testing_mandatory_backendTests</RootNamespace>
+
+    <!-- Enable implicit using statements for common namespaces -->
     <ImplicitUsings>enable</ImplicitUsings>
+
+    <!-- Enable nullable reference types -->
     <Nullable>enable</Nullable>
 
+    <!-- Marking the project as non-packable, typically for test projects -->
     <IsPackable>false</IsPackable>
+
+    <!-- Indicate that this project is a test project -->
     <IsTestProject>true</IsTestProject>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="coverlet.collector" Version="6.0.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
-    <PackageReference Include="xunit" Version="2.9.2" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
-  </ItemGroup>
 
   <ItemGroup>
-    <Using Include="Xunit" />
+    <!-- Package for code coverage via Coverlet -->
+    <PackageReference Include="coverlet.collector" Version="6.0.2">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+
+    <!-- Test SDK and xUnit packages -->
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="xunit" Version="2.4.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5" />
   </ItemGroup>
 
   <ItemGroup>
