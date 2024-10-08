@@ -13,6 +13,7 @@ public class FakeAddressGeneratorIntegrationTest
     public FakeAddressGeneratorIntegrationTest(TestDatabaseFixture fixture)
     {
         _fixture = fixture;
+        _fixture.CreateNewConnection();
         _fixture.ResetDatabase();
 
         _postalCodeRepository = new(_fixture.Connection);

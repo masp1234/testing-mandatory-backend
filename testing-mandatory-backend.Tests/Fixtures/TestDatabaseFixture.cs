@@ -7,9 +7,10 @@ public class DatabaseCollection : ICollectionFixture<TestDatabaseFixture>
 {
 }
 
-public class TestDatabaseFixture : IDisposable
+public class TestDatabaseFixture
 {
-    public MySqlConnection Connection { get; private set; }
+    private readonly string? connectionString;
+    public MySqlConnection Connection;
 
     public TestDatabaseFixture()
     {
@@ -19,14 +20,19 @@ public class TestDatabaseFixture : IDisposable
             .AddJsonFile("appsettings.Test.json", optional: false)
             .Build();
 
-        string? connectionString = config.GetConnectionString("test");
+        connectionString = config.GetConnectionString("test");
+        Connection = new MySqlConnection(connectionString);
+    }
+
+    public void CreateNewConnection()
+    {
         Connection = new MySqlConnection(connectionString);
         Connection.Open();
     }
 
     public void ResetDatabase()
     {
-        var clearCommand = new MySqlCommand("DELETE FROM postal_code;", Connection);
+        var clearCommand = new MySqlCommand("DELETE FROM postal_code;", this.Connection);
         clearCommand.ExecuteNonQuery();
     }
 
@@ -35,14 +41,9 @@ public class TestDatabaseFixture : IDisposable
         foreach (var (postalCode, townName) in entries)
         {
             var insertCommand = new MySqlCommand(
-                $"INSERT INTO postal_code (cPostalCode, cTownName) VALUES ('{postalCode ?? null}', '{townName ?? null}');",
-                Connection);
+                $"INSERT INTO postal_code (cPostalCode, cTownName) VALUES ('{postalCode}', '{townName}');",
+                this.Connection);
             insertCommand.ExecuteNonQuery();
         }
-    }
-
-    public void Dispose()
-    {
-        Connection.Close();
     }
 }
