@@ -1,6 +1,7 @@
-﻿using testing_mandatory_backend.Repositories;
+﻿using testing_mandatory_backend.Models;
+using testing_mandatory_backend.Repositories;
 
-namespace testing_mandatory_backend
+namespace testing_mandatory_backend.Services
 {
     public class FakeAddressGenerator
     {
@@ -10,8 +11,8 @@ namespace testing_mandatory_backend
 
         public FakeAddressGenerator(IPostalCodeRepository postalCodeRepository, Random? random = null)
         {
-            this._postalCodeRepository = postalCodeRepository;
-            this._random = random ?? new Random();
+            _postalCodeRepository = postalCodeRepository;
+            _random = random ?? new Random();
         }
 
         public FakeAddress GenerateFakeAddress()
@@ -108,8 +109,8 @@ namespace testing_mandatory_backend
 
         private char GetRandomLetter()
         {
-            int randomLetterIndex = _random.Next(0, this._letters.Length);
-            return this._letters[randomLetterIndex];
+            int randomLetterIndex = _random.Next(0, _letters.Length);
+            return _letters[randomLetterIndex];
         }
 
         private (string postalCode, string townName) GeneratePostalCodeAndTownName()

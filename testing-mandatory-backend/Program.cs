@@ -1,6 +1,7 @@
 
 using MySql.Data.MySqlClient;
 using testing_mandatory_backend.Repositories;
+using testing_mandatory_backend.Services;
 
 namespace testing_mandatory_backend
 {

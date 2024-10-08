@@ -1,4 +1,4 @@
-﻿namespace testing_mandatory_backend
+﻿namespace testing_mandatory_backend.Models
 {
     public class FakeAddress
     {

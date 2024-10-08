@@ -1,6 +1,7 @@
 ﻿using Moq;
 using testing_mandatory_backend.Repositories;
-using testing_mandatory_backend;
+using testing_mandatory_backend.Services;
+using testing_mandatory_backend.Models;
 
 public class FakeAddressGeneratorFixture
 {
