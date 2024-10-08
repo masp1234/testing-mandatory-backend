@@ -4,24 +4,56 @@ using System.Linq;
 
 namespace testing_mandatory_backend.Service;
 
-
-
-
 public class PhoneNumberGenerator
 {
     // Use a HashSet to store valid prefixes for efficient lookups and avoid duplicate entries
     private static readonly HashSet<string> ValidPrefixes = new HashSet<string>
     {
-        "2", "30", "31", "40", "41", "42", "50", "51", "52", "53", "60", "61", "71", "81", "91", "92", "93",
-        "342", "344", "345", "346", "347", "348", "349", "356", "357", "359", "362", "365", "366", "389", "398",
-        "431", "441", "462", "466", "468", "472", "474", "476", "478", "485", "486", "488", "489", "493", "494", "495", "496",
-        "498", "499", "542", "543", "545", "551", "552", "556", "571", "572", "573", "574", "577", "579", "584", "586", "587",
-        "589", "597", "598", "627", "629", "641", "649", "658", "662", "663", "664", "665", "667", "692", "693", "694", "697",
-        "771", "772", "782", "783", "785", "786", "788", "789", "826", "827", "829"
+        "2", "30", "31", "40", "41", "42", "50", "51", "52", "53",
+        "60", "61", "71", "81", "91", "92", "93",
+        "342", "344", "345", "346", "347", "348", "349",
+        "356", "357", "359", "362", "365", "366",
+        "389", "398", "431", "441", "462", "466", "468", "472",
+        "474", "476", "478", "485-486", "488-489",
+        "493-496", "498-499",
+        "542-543", "545",
+        "551-552", "556",
+        "571-574",
+        "782-783", "785-786", "788-789", "826-827", "829"
     };
+
+    // Expanded valid prefixes to handle ranges like "485-486"
+    private static readonly HashSet<string> ExpandedValidPrefixes = ExpandValidPrefixes();
+
+    private static HashSet<string> ExpandValidPrefixes()
+    {
+        var prefixes = new HashSet<string>();
+
+        foreach (var validPrefix in ValidPrefixes)
+        {
+            if (validPrefix.Contains("-"))
+            {
+                var parts = validPrefix.Split('-');
+                if (int.TryParse(parts[0], out int start) && int.TryParse(parts[1], out int end))
+                {
+                    for (int i = start; i <= end; i++)
+                    {
+                        prefixes.Add(i.ToString());
+                    }
+                }
+            }
+            else
+            {
+                prefixes.Add(validPrefix);
+            }
+        }
+
+        return prefixes;
+    }
 
     // Random number generator used for generating random digits in phone numbers
     private static readonly Random RandomGenerator = new Random();
+
     private const int PhoneNumberLength = 8; // Standard phone number length required
 
     // Method to generate a phone number based on a given prefix
@@ -35,6 +67,11 @@ public class PhoneNumberGenerator
 
         // Calculate how many more digits are needed to complete the phone number length
         int remainingLength = PhoneNumberLength - prefix.Length;
+        if (remainingLength <= 0)
+        {
+            throw new ArgumentException("Prefix is too long for the phone number length");
+        }
+
         // Generate the random digits required to complete the phone number
         string randomDigits = GenerateRandomDigits(remainingLength);
 
@@ -45,24 +82,40 @@ public class PhoneNumberGenerator
     // Method to generate multiple phone numbers in bulk
     public List<string> GenerateBulkPhoneNumbers(int count)
     {
-        HashSet<string> phoneNumbers = new HashSet<string>(); // Use HashSet to ensure uniqueness of phone numbers
+        var phoneNumbers = new HashSet<string>();
+        var prefixes = ExpandedValidPrefixes.ToList();
 
-        // Keep generating phone numbers until the required count is reached
+        // Shuffle the list for better randomness
+        Shuffle(prefixes);
+
+        int prefixIndex = 0;
+
         while (phoneNumbers.Count < count)
         {
-            string prefix = GetRandomValidPrefix(); // Get a random valid prefix
-            string phoneNumber = GeneratePhoneNumber(prefix); // Generate phone number with the selected prefix
-            phoneNumbers.Add(phoneNumber); // Add to HashSet to avoid duplicates
+            if (prefixIndex >= prefixes.Count)
+            {
+                // If we have exhausted all prefixes, reshuffle and start over
+                Shuffle(prefixes);
+                prefixIndex = 0;
+            }
+
+            var prefix = prefixes[prefixIndex];
+            var phoneNumber = GeneratePhoneNumber(prefix);
+
+            // Ensure uniqueness
+            if (phoneNumbers.Add(phoneNumber))
+            {
+                prefixIndex++;
+            }
         }
 
-        return phoneNumbers.ToList(); // Convert HashSet to List for return
+        return phoneNumbers.Take(count).ToList();
     }
 
     // Method to validate if the prefix is valid
     private bool IsValidPrefix(string prefix)
     {
-        // Check if the prefix is in the set of valid prefixes and that it only contains digits
-        return ValidPrefixes.Contains(prefix) && prefix.All(char.IsDigit);
+        return ExpandedValidPrefixes.Contains(prefix);
     }
 
     // Method to generate a string of random numeric digits of a given length
@@ -77,12 +130,15 @@ public class PhoneNumberGenerator
         return new string(digits);
     }
 
-    // Method to get a random prefix from the set of valid prefixes
-    private string GetRandomValidPrefix()
+    // Method to shuffle a list (Fisher-Yates shuffle algorithm)
+    private void Shuffle<T>(IList<T> list)
     {
-        // Generate a random index to pick a prefix from the ValidPrefixes HashSet
-        int index = RandomGenerator.Next(ValidPrefixes.Count);
-        return ValidPrefixes.ElementAt(index); // Convert HashSet to an indexed collection for selection
+        int n = list.Count;
+        while (n > 1)
+        {
+            n--;
+            int k = RandomGenerator.Next(n + 1);
+            (list[k], list[n]) = (list[n], list[k]);
+        }
     }
 }
-
