@@ -1,3 +1,7 @@
+using testing_mandatory_backend.Services;
+
+namespace testing_mandatory_backend.Tests
+{
 public class BirthdayGeneratorTests
 {
     [Fact]
@@ -44,4 +48,5 @@ public class BirthdayGeneratorTests
         // Assert
         Assert.True(randomBirthday <= DateTime.Today.AddYears(-18));
     }
+}
 }

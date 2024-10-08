@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\testing-mandatory-backend\BirthdayGenerator\BirthdayGenerator.csproj" />
+    <ProjectReference Include="..\testing-mandatory-backend\Services\BirthdayGenerator.cs" />
   </ItemGroup>
 
 </Project>

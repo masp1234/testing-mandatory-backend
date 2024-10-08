@@ -13,11 +13,4 @@
         return randomDate;
     }
 
-    /*
-    public static void Main(string[] args)
-    {
-        DateTime randomBirthday = GenerateRandomBirthday();
-        Console.WriteLine($"Randomly generated birthday: {randomBirthday.ToShortDateString()}");
-    }
-    */
 }
