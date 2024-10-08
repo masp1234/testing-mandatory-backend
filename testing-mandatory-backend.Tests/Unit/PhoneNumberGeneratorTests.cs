@@ -1,7 +1,4 @@
 using testing_mandatory_backend.Services;  // Import the namespace containing PhoneNumberGenerator
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 
 namespace testing_mandatory_backend.Tests
