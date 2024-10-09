@@ -5,8 +5,10 @@ using testing_mandatory_backend.Repositories;
 using testing_mandatory_backend.Services;
 using Xunit;
 
+
 namespace testing_mandatory_backend.Tests
 {
+    [Trait("Category", "Unit")]
     public class FakeAddressGeneratorTest: IClassFixture<FakeAddressGeneratorFixture>
     {
         private readonly FakeAddressGeneratorFixture _fixture;
