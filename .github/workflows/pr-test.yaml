@@ -36,10 +36,10 @@ jobs:
         run: mysql -h 127.0.0.1 -u root -p123123 test_addresses < ./testing-mandatory-backend/Scripts/test-addresses.sql
 
       - name: Run Unit Tests
-        run: dotnet test testing-mandatory-backend.Tests/testing-mandatory-backend.Tests.csproj --verbosity normal
+        run: dotnet test testing-mandatory-backend.Tests/Unit --verbosity normal
 
       - name: Publish
         run: dotnet publish testing-mandatory-backend/testing-mandatory-backend.csproj -c Release -o ./publish
 
       - name: Run Integration Tests
-        run: dotnet test testing-mandatory-backend.Tests/testing-mandatory-backend.Tests.csproj --no-build
+        run: dotnet test testing-mandatory-backend.Tests/Integration --no-build
