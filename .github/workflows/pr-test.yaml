@@ -1,0 +1,45 @@
+name: Pull Request Test
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: 123123
+          MYSQL_DATABASE: test_addresses
+        ports:
+          - 3306:3306
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore Dependencies
+        run: dotnet restore testing-mandatory-backend.sln
+
+      - name: Build
+        run: dotnet build testing-mandatory-backend.sln --no-restore -c Release
+
+      - name: Seed Database
+        run: mysql -h 127.0.0.1 -u root -p123123 test_db < ./testing-mandatory-backend/Scripts/test-addresses.sql
+
+      - name: Run Unit Tests
+        run: dotnet test testing-mandatory-backend.Tests/testing-mandatory-backend.Tests.csproj --no-build --verbosity normal
+
+      - name: Publish
+        run: dotnet publish testing-mandatory-backend/testing-mandatory-backend.csproj -c Release -o ./publish
+
+      - name: Run Integration Tests
+        run: dotnet test testing-mandatory-backend.Tests/testing-mandatory-backend.Tests.csproj --no-build
