@@ -3,6 +3,7 @@ using testing_mandatory_backend.Repositories;
 using testing_mandatory_backend.Services;
 using Xunit;
 
+[Trait("Category", "Integration")]
 [Collection("Database Collection")]
 public class FakeAddressGeneratorIntegrationTest
 {

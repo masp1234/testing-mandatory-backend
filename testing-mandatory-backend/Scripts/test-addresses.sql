@@ -1,5 +1,3 @@
-
---
 CREATE DATABASE IF NOT EXISTS `test_addresses` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `test_addresses`;
 
@@ -12,3 +10,5 @@ CREATE TABLE IF NOT EXISTS `postal_code` (
   `cTownName` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`cPostalCode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+

@@ -3,6 +3,7 @@ using Xunit;
 
 namespace testing_mandatory_backend.Tests
 {
+[Trait("Category", "Unit")]
 public class BirthdayGeneratorTests
 {
     [Fact]
