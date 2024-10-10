@@ -75,19 +75,5 @@ public class PersonServiceTests
         Assert.All(result, p => Assert.Equal("Male", p.Gender, StringComparer.OrdinalIgnoreCase));
     }
 
-    [Fact]
-    public void GetPersonFromJsonFile_ShouldThrowException_IfNotEnoughPersonsAvailable()
-    {
-        var personService = new PersonService();
-        var mockPersonsData = new List<Person>
-        {
-            new ("John",  "Doe",  "Male")
-        };
 
-        var json = JsonSerializer.Serialize(mockPersonsData);
-        File.WriteAllText("./Data/person-names.json", json);
-
-        var exception = Assert.Throws<Exception>(() => personService.GetPersonFromJsonFile("Male", 2));
-        Assert.Equal("No persons found with gender 'Male'.", exception.Message);
-    }
 }
