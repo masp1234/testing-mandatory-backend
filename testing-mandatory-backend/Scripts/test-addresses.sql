@@ -10,3 +10,5 @@ CREATE TABLE IF NOT EXISTS `postal_code` (
   `cTownName` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`cPostalCode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
