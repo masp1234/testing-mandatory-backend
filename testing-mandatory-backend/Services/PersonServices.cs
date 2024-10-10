@@ -6,7 +6,7 @@ namespace testing_mandatory_backend.Services
     public class PersonService
     {
         
-        public Person GetPersonFromJsonFile(string gender)
+        public List<Person> GetPersonFromJsonFile(string gender, int count)
         {
             var jsonFilePath = Path.Combine(Directory.GetCurrentDirectory(), "./Data", "person-names.json");
             var jsonData = File.ReadAllText(jsonFilePath);
@@ -19,7 +19,6 @@ namespace testing_mandatory_backend.Services
             
     
 
-            //Console.WriteLine("her is personData " + personsData!);
 
             if (personsData == null || personsData.Count == 0)
             {
@@ -28,26 +27,34 @@ namespace testing_mandatory_backend.Services
 
             
 
-            // Filter the persons based on the specified gender
             var filteredPersons = personsData
                 .Where(p => p.Gender.Equals(gender, StringComparison.OrdinalIgnoreCase))
                 .ToList();
 
-            // Check if any persons match the specified gender
             if (filteredPersons.Count == 0)
             {
                 throw new Exception($"No persons found with gender '{gender}'.");
             }
-            // Get a random person
+             // Generate and return `count` random persons
             Random random = new();
-            int randomIndex = random.Next(filteredPersons.Count);
-            return filteredPersons[randomIndex];
+            List<Person> randomPersons = new();
+
+            for (int i = 0; i < count; i++)
+            {
+                int randomIndex = random.Next(filteredPersons.Count);
+                randomPersons.Add(filteredPersons[randomIndex]);
+            }
+
+            return randomPersons;
             
         }
 
-        public void PrintPerson(Person person)
+        public void PrintPerson(List<Person> persons)
         {
-            Console.WriteLine($"Name: {person.Name}, Surname: {person.Surname}, Gender: {person.Gender}");
+            foreach (var person in persons)
+            {
+                Console.WriteLine($"Name: {person.Name}, Surname: {person.Surname}, Gender: {person.Gender}");
+            }
         }
     }
 }

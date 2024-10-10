@@ -41,4 +41,8 @@
     <ProjectReference Include="..\testing-mandatory-backend\testing-mandatory-backend.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\testing-mandatory-backend\testing-mandatory-backend.csproj" />
+  </ItemGroup>
+
 </Project>
