@@ -41,6 +41,11 @@ public class Program
             builder.Services.AddScoped<IPostalCodeRepository, PostalCodeRepository>();
 
             builder.Services.AddScoped<FakeAddressGenerator>();
+            
+            builder.Services.AddScoped<INameAndGenderRepository, NameAndGenderRepository>();
+
+            builder.Services.AddScoped<NameAndGenderGenerator>();
+
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
