@@ -12,19 +12,29 @@ namespace testing_mandatory_backend.Repositories
         }
 
         public List<(string postalCode, string townName)> GetPostalCodesAndTowns()
+
         {
-            MySqlCommand command = new("SELECT * FROM postal_code", this.connection);
-
-            MySqlDataReader reader = command.ExecuteReader();
-
             List<(string postalCode, string townName)> postalCodes = [];
 
-            while (reader.Read())
-            {
-                postalCodes.Add((reader.GetString(0), reader.GetString(1)));
+            MySqlCommand command = new("SELECT * FROM postal_code", this.connection);
 
+            try
+            {
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    postalCodes.Add((reader.GetString(0), reader.GetString(1)));
+
+                }
+                reader.Close();
             }
-            reader.Close();
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+           
             return postalCodes;
 
         }
