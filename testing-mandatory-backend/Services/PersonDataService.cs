@@ -51,8 +51,6 @@ namespace testing_mandatory_backend.Services
                 );
 
             return newPerson;
-           
-
         }
     }
 }

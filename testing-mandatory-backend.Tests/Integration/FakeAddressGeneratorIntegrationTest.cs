@@ -4,8 +4,7 @@ using testing_mandatory_backend.Services;
 using Xunit;
 
 [Trait("Category", "Integration")]
-[Collection("Database Collection")]
-public class FakeAddressGeneratorIntegrationTest
+public class FakeAddressGeneratorIntegrationTest: IClassFixture<TestDatabaseFixture>
 {
     private readonly TestDatabaseFixture _fixture;
     private readonly PostalCodeRepository _postalCodeRepository;

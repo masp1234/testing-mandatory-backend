@@ -1,11 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
-using Xunit;
-
-[CollectionDefinition("Database Collection")]
-public class DatabaseCollection : ICollectionFixture<TestDatabaseFixture>
-{
-}
 
 public class TestDatabaseFixture : IDisposable
 {
