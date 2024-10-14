@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace testing_mandatory_backend.Services;
 
-public class PhoneNumberGenerator
+public class PhoneNumberGenerator: IPhoneNumberGenerator
 {
     // Use a HashSet to store valid prefixes for efficient lookups and avoid duplicate entries
     private static readonly HashSet<string> ValidPrefixes = new HashSet<string>
@@ -57,8 +57,14 @@ public class PhoneNumberGenerator
     private const int PhoneNumberLength = 8; // Standard phone number length required
 
     // Method to generate a phone number based on a given prefix
-    public string GeneratePhoneNumber(string prefix)
+    public string GeneratePhoneNumber(string? prefix)
     {
+        if (prefix == null)
+        {
+            var prefixes = ExpandedValidPrefixes.ToList();
+            Shuffle(prefixes);
+            prefix = prefixes.First();
+        }
         // Validate if the prefix is part of the valid set of prefixes
         if (!IsValidPrefix(prefix))
         {

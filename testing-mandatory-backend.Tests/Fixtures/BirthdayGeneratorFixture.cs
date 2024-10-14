@@ -9,9 +9,10 @@ namespace testing_mandatory_backend.Tests.Fixtures
         public const int numberOfTests = 1000;
 
         public BirthdayGeneratorFixture() {
+            BirthdayGenerator birthdayGenerator = new();
             RandomBirthdays = new List<DateTime>();
             for (int i = 0; i < numberOfTests; i++) {
-                RandomBirthdays.Add(BirthdayGenerator.GenerateRandomBirthday());
+                RandomBirthdays.Add(birthdayGenerator.GenerateRandomBirthday());
             }
         }
     }

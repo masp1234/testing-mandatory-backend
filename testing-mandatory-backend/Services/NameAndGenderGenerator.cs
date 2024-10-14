@@ -4,7 +4,7 @@ using testing_mandatory_backend.Repositories;
 
 namespace testing_mandatory_backend.Services
 {
-    public class NameAndGenderGenerator
+    public class NameAndGenderGenerator: INameAndGenderGenerator
     {
         private readonly INameAndGenderRepository _NameAndGenderRepository;
 
@@ -14,34 +14,18 @@ namespace testing_mandatory_backend.Services
             _NameAndGenderRepository = nameAndGenderRepository;
         }
         
-        public Person GetNameAndGenderFromJsonFile(string gender)
+        public Person GenerateNameAndGender()
         {
-            var personsData = _NameAndGenderRepository.GetNameAndGender();
+            var people = _NameAndGenderRepository.GetNameAndGender();
             
-            if (personsData == null || personsData.Count == 0)
+            if (people == null || people.Count == 0)
             {
                 throw new Exception("No persons found in the JSON data.");
             }
 
-            var filteredPersons = personsData
-                .Where(p => p.Gender.Equals(gender, StringComparison.OrdinalIgnoreCase))
-                .ToList();
-
-            if (filteredPersons.Count == 0)
-            {
-                throw new Exception($"No persons found with gender '{gender}'.");
-            }
-
             Random random = new();
-            int randomIndex = random.Next(filteredPersons.Count);
-            return filteredPersons[randomIndex];
-            
-        }
-
-        public void PrintPerson(Person person)
-        {
-            
-            Console.WriteLine($"Name: {person.Name}, Surname: {person.Surname}, Gender: {person.Gender}");
+            int randomIndex = random.Next(people.Count);
+            return people[randomIndex];
             
         }
     }
