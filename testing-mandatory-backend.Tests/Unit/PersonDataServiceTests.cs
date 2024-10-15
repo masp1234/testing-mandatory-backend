@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using testing_mandatory_backend.Models;
+using testing_mandatory_backendTests.Util;
 using Xunit;
 
 namespace testing_mandatory_backendTests.Unit
@@ -40,7 +41,7 @@ namespace testing_mandatory_backendTests.Unit
             Assert.Equal(5, peopleData.Count());
             peopleData.ForEach(personData =>
             {
-               CheckPersonDataPropertiesForNullValues(personData);
+                PersonDataValidator.CheckForNullValues(personData);
             });
         }
 
@@ -48,28 +49,7 @@ namespace testing_mandatory_backendTests.Unit
         public void CreatePersonData_ShouldReturn_ValidPersonData()
         {
             PersonData personData = _fixture.PersonDataService.CreatePersonData();
-            CheckPersonDataPropertiesForNullValues(personData);
+            PersonDataValidator.CheckForNullValues(personData);
         }
-
-        
-        private void CheckPersonDataPropertiesForNullValues(PersonData personData)
-        {
-            Type type = personData.GetType();
-            PropertyInfo[] properties = type.GetProperties();
-            foreach (PropertyInfo property in properties)
-            {
-                /*
-                 Check that Birthday has actually been set,
-                 and that it is not using the default value for DateTime (which is DateTime.MinValue)
-                */
-                var propertyValue = property.GetValue(personData);
-                if (property.PropertyType == typeof(DateTime))
-                {
-                    Assert.NotEqual(DateTime.MinValue, propertyValue);
-                }
-
-                Assert.NotNull(propertyValue);
-            }
         }
     }
-}

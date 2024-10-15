@@ -6,7 +6,7 @@
 
         public Person Person { get; set; }
 
-        public DateTime BirthDay { get; set; }
+        public DateTime Birthday { get; set; }
 
         public string PhoneNumber { get; set; }
 
@@ -22,7 +22,7 @@
         {
             FakeAddress = fakeAddress;
             Person = person;
-            BirthDay = birthday;
+            Birthday = birthday;
             PhoneNumber = phoneNumber;
             CPR = cpr;
 

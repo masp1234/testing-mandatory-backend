@@ -4,6 +4,12 @@ using testing_mandatory_backend.Services;
 using Xunit;
 
 [Trait("Category", "Integration")]
+/* 
+    Run the tests that are in the "Sequential" collection sequentially (and not in parallel)
+    This is because they share the same test database (the TestDatabaseFixture)
+    If they don't run sequentially different tests will fail at different times
+*/
+[Collection("Sequential")]
 public class FakeAddressGeneratorIntegrationTest: IClassFixture<TestDatabaseFixture>
 {
     private readonly TestDatabaseFixture _fixture;
