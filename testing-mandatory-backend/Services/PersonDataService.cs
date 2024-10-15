@@ -29,6 +29,7 @@ namespace testing_mandatory_backend.Services
             for (int i = 0; i < amount; i++)
             {
                 peopleData.Add(CreatePersonData());
+                    
             }
             return peopleData;
 
@@ -37,20 +38,29 @@ namespace testing_mandatory_backend.Services
 
         public PersonData CreatePersonData()
         {
-            DateTime birthday = _birthdayGenerator.GenerateRandomBirthday();
-            string phoneNumber = _phoneNumberGenerator.GeneratePhoneNumber(null);
-            FakeAddress address = _fakeAddressGenerator.GenerateFakeAddress();
-            Person person = _nameAndGenderGenerator.GenerateNameAndGender();
-            // string cpr = _cprGenerator.GenerateCPR(birthday, person.Gender);
-            PersonData newPerson = new(
-                address,
-                person,
-                birthday,
-                phoneNumber,
-                "temp cpr"
-                );
+            PersonData personData;
+            try
+            {
+                DateTime birthday = _birthdayGenerator.GenerateRandomBirthday();
+                string phoneNumber = _phoneNumberGenerator.GeneratePhoneNumber(null);
+                FakeAddress address = _fakeAddressGenerator.GenerateFakeAddress();
+                Person person = _nameAndGenderGenerator.GenerateNameAndGender();
+                // string cpr = _cprGenerator.GenerateCPR(birthday, person.Gender);
+               personData = new(
+                    address,
+                    person,
+                    birthday,
+                    phoneNumber,
+                    "temp cpr"
+                    );
 
-            return newPerson;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw new InvalidOperationException("Failed to generate person data.", ex);
+            }
+            return personData;
         }
     }
 }
