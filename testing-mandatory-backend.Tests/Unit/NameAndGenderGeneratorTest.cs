@@ -14,7 +14,7 @@ public class NameAndGenderGeneratorTests
     public void GetNameAndGenderFromJsonFile_ShouldReturnRandomPerson()
     {
         var mockRepo = new Mock<INameAndGenderRepository>();
-        mockRepo.Setup(repo => repo.GetNameAndGender()).Returns(new List<Person>
+        mockRepo.Setup(repo => repo.GetNameAndGender()).Returns(new List<NameAndGender>
         {
             new("John",  "Doe", "Male") ,
             new ("Jane", "Doe", "Female" ),
@@ -32,7 +32,7 @@ public class NameAndGenderGeneratorTests
     public void GetNameAndGenderFromJsonFile_ShouldThrowException_IfNoPersonsInRepository()
     {
         var mockRepo = new Mock<INameAndGenderRepository>();
-        mockRepo.Setup(repo => repo.GetNameAndGender()).Returns(new List<Person>()); // Empty list
+        mockRepo.Setup(repo => repo.GetNameAndGender()).Returns(new List<NameAndGender>()); // Empty list
 
         var generator = new NameAndGenderGenerator(mockRepo.Object);
 
@@ -44,7 +44,7 @@ public class NameAndGenderGeneratorTests
     public void GetNameAndGenderFromJsonFile_ShouldReturnRandomPersonFromList()
     {
         var mockRepo = new Mock<INameAndGenderRepository>();
-        var mockPersons = new List<Person>
+        var mockPersons = new List<NameAndGender>
         {
             new  ("John", "Doe", "Male"),
             new  ("Michael", "Smith", "Male"),

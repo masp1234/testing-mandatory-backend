@@ -4,7 +4,7 @@
     {
         public FakeAddress FakeAddress { get; set; }
 
-        public Person Person { get; set; }
+        public NameAndGender Person { get; set; }
 
         public DateTime Birthday { get; set; }
 
@@ -14,7 +14,7 @@
 
         public PersonData(
             FakeAddress fakeAddress,
-            Person person,
+            NameAndGender person,
             DateTime birthday,
             string phoneNumber,
             string cpr

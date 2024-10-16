@@ -55,7 +55,7 @@ public class FakeAddressGeneratorIntegrationTest: IClassFixture<TestDatabaseFixt
     [InlineData("1111", "")]
     [InlineData("", "Glostrup")]
     [InlineData("", "")]
-    public void GenerateFakeAddress_ThrowsException_When_PostalCodeOrTownName_IsMissing(string postalCode, string townName)
+    public void GenerateFakeAddress_ThrowsException_When_PostalCodeOrTownName_IsMissing(string? postalCode, string? townName)
     {
         // Arrange
         var seedData = (postalCode, townName);

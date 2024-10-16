@@ -70,7 +70,7 @@ namespace testing_mandatory_backendTests.Unit
 
             var mockNameAndGenderGenerator = new Mock<INameAndGenderGenerator>();
             mockNameAndGenderGenerator.Setup(generator => generator.GenerateNameAndGender())
-                .Returns(new Person("John", "Doe", "Male"));
+                .Returns(new NameAndGender("John", "Doe", "Male"));
 
             PersonDataService personDataService = new(mockBirthdayGenerator.Object,
                                     mockPhoneNumberGenerator.Object,

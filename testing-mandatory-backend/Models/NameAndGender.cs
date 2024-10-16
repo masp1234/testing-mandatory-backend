@@ -1,11 +1,11 @@
 namespace testing_mandatory_backend.Models
 {
-    public class Person
+    public class NameAndGender
     {
         public string Name { get; set; }
         public string Surname { get; set; }
         public string Gender { get; set; }
-        public Person(string name, string surname, string gender)
+        public NameAndGender(string name, string surname, string gender)
         {
             Name = name;
             Surname = surname;
@@ -13,17 +13,4 @@ namespace testing_mandatory_backend.Models
             
         }
     }
-    public class PersonsData
-    {
-        public List<Person> Persons { get; set; }
-
-        public PersonsData(List<Person> persons){
-            Persons = persons;
-        }
-
-  
-    }
-
-
-
 }

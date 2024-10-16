@@ -7,6 +7,10 @@ using Xunit;
 namespace testing_mandatory_backendTests.Integration
 {
     [Collection("Sequential")]
+    /* 
+        Big bang approach - connecting this component and 
+        all the downstream dependencies and testing them in one go
+     */
     public class PersonDataServiceIntegrationTests: IClassFixture<TestDatabaseFixture>
     {
         private readonly TestDatabaseFixture _testDatabaseFixture;
@@ -32,6 +36,7 @@ namespace testing_mandatory_backendTests.Integration
                 fakeAddressGenerator
             );
 
+            // Resetting the database between each test (tests that do not seed the database works with an empty database)
             _testDatabaseFixture.ResetDatabase();
         }
 
@@ -86,7 +91,6 @@ namespace testing_mandatory_backendTests.Integration
             Assert.Equal(amount, peopleData.Count);
         }
 
-        // Handle Exceptions thrown by Generators
         [Fact]
         public void GenerateBulkPersonData_ShouldThrowException_When_AGeneratorFails()
         {

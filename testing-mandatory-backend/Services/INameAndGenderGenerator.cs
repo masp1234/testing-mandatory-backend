@@ -4,6 +4,6 @@ namespace testing_mandatory_backend.Services
 {
     public interface INameAndGenderGenerator
     {
-        public Person GenerateNameAndGender();
+        public NameAndGender GenerateNameAndGender();
     }
 }

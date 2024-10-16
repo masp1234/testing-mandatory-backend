@@ -14,7 +14,7 @@ namespace testing_mandatory_backend.Services
             _NameAndGenderRepository = nameAndGenderRepository;
         }
         
-        public Person GenerateNameAndGender()
+        public NameAndGender GenerateNameAndGender()
         {
             var people = _NameAndGenderRepository.GetNameAndGender();
             
