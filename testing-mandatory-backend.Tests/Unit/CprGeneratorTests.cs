@@ -6,12 +6,10 @@ using testing_mandatory_backend.Models;
 namespace testing_mandatory_backend.Tests
 {
     [Trait("Category", "Unit")]
-    public class CprGeneratorTests
-    {
+    public class CprGeneratorTests {
         private readonly CprGenerator _cprGenerator;
 
-        public CprGeneratorTests()
-        {
+        public CprGeneratorTests() {
             _cprGenerator = new CprGenerator();
         }
 
