@@ -3,7 +3,7 @@ using testing_mandatory_backend.Repositories;
 
 namespace testing_mandatory_backend.Services
 {
-    public class FakeAddressGenerator
+    public class FakeAddressGenerator: IFakeAddressGenerator
     {
         private readonly Random _random;
         private readonly IPostalCodeRepository _postalCodeRepository;

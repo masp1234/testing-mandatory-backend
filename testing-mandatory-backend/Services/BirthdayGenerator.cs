@@ -1,6 +1,8 @@
-﻿public class BirthdayGenerator
+﻿using testing_mandatory_backend.Services;
+
+public class BirthdayGenerator: IBirthdayGenerator
 {
-    public static DateTime GenerateRandomBirthday()
+    public DateTime GenerateRandomBirthday()
     {
         DateTime today = DateTime.Today;
         DateTime earliestDate = today.AddYears(-100);

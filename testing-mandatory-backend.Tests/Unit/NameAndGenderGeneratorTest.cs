@@ -11,10 +11,10 @@ public class NameAndGenderGeneratorTests
 
 
     [Fact]
-    public void GetNameAndGenderFromJsonFile_ShouldReturnRandomPersonWithMatchingGender()
+    public void GetNameAndGenderFromJsonFile_ShouldReturnRandomPerson()
     {
         var mockRepo = new Mock<INameAndGenderRepository>();
-        mockRepo.Setup(repo => repo.GetNameAndGender()).Returns(new List<Person>
+        mockRepo.Setup(repo => repo.GetNameAndGender()).Returns(new List<NameAndGender>
         {
             new("John",  "Doe", "Male") ,
             new ("Jane", "Doe", "Female" ),
@@ -22,10 +22,9 @@ public class NameAndGenderGeneratorTests
 
         var generator = new NameAndGenderGenerator(mockRepo.Object);
 
-        var result = generator.GetNameAndGenderFromJsonFile("Female");
+        var result = generator.GenerateNameAndGender();
 
         Assert.NotNull(result);
-        Assert.Equal("Female", result.Gender, ignoreCase: true);
     }
 
 
@@ -33,11 +32,11 @@ public class NameAndGenderGeneratorTests
     public void GetNameAndGenderFromJsonFile_ShouldThrowException_IfNoPersonsInRepository()
     {
         var mockRepo = new Mock<INameAndGenderRepository>();
-        mockRepo.Setup(repo => repo.GetNameAndGender()).Returns(new List<Person>()); // Empty list
+        mockRepo.Setup(repo => repo.GetNameAndGender()).Returns(new List<NameAndGender>()); // Empty list
 
         var generator = new NameAndGenderGenerator(mockRepo.Object);
 
-        var exception = Assert.Throws<Exception>(() => generator.GetNameAndGenderFromJsonFile("Male"));
+        var exception = Assert.Throws<Exception>(() => generator.GenerateNameAndGender());
         Assert.Equal("No persons found in the JSON data.", exception.Message);
     }
 
@@ -45,7 +44,7 @@ public class NameAndGenderGeneratorTests
     public void GetNameAndGenderFromJsonFile_ShouldReturnRandomPersonFromList()
     {
         var mockRepo = new Mock<INameAndGenderRepository>();
-        var mockPersons = new List<Person>
+        var mockPersons = new List<NameAndGender>
         {
             new  ("John", "Doe", "Male"),
             new  ("Michael", "Smith", "Male"),
@@ -56,23 +55,21 @@ public class NameAndGenderGeneratorTests
 
         var generator = new NameAndGenderGenerator(mockRepo.Object);
 
-        var result = generator.GetNameAndGenderFromJsonFile("Male");
+        var result = generator.GenerateNameAndGender();
 
         Assert.NotNull(result);  // Ensure we get a person
         Assert.Contains(result, mockPersons);  // Ensure the returned person is in the mocked list
     }
-
-        [Fact]
+    [Fact]
     public void GetNameAndGender_ShouldReturnCorrectData_FromJsonFile()
     {
             var repository = new NameAndGenderRepository();
 
             var generator = new NameAndGenderGenerator(repository);
 
-            var result = generator.GetNameAndGenderFromJsonFile("Female");
+            var result = generator.GenerateNameAndGender();
 
             Assert.NotNull(result);  // Check that a person is returned
-            Assert.Equal("Female", result.Gender, StringComparer.OrdinalIgnoreCase);  // Ensure the gender matches  
     }
 
 }

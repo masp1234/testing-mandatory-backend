@@ -4,6 +4,6 @@ namespace testing_mandatory_backend.Repositories
 {
     public interface INameAndGenderRepository
     {
-        List<Person> GetNameAndGender();
+        List<NameAndGender> GetNameAndGender();
     }
 }
