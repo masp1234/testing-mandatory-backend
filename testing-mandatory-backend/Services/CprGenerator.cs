@@ -36,7 +36,7 @@ namespace testing_mandatory_backend.Services {
             string birthdayPart = randomBirthday.ToString("ddMMyy");
 
             Random random = new Random();
-            int sequenceNumber = random.Next(0, 5000); // Generate a random sequence number in this range
+            int sequenceNumber = random.Next(100, 1000); // Generate a random sequence number in this range
 
             // Ensures the last digit is odd for males and even for females
             int lastDigit = random.Next(0, 10);
@@ -54,9 +54,25 @@ namespace testing_mandatory_backend.Services {
             }
 
             // Combine the parts to form the CPR number
-            string cpr = $"{birthdayPart}-{sequenceNumber:D4}{lastDigit}";
+            string cpr = $"{birthdayPart}-{sequenceNumber:D3}{lastDigit}";
 
             return (cpr, randomPerson, randomBirthday);
+        }
+
+        public void PrintCprWithBirthdayAndGender(string gender)
+{
+            // Call the GenerateCprWithBirthdayAndGender method
+            var result = GenerateCprWithBirthdayAndGender(gender);
+
+            // Extract the values from the result
+            string cpr = result.cpr;
+            Person randomPerson = result.randomPerson;
+            DateTime randomBirthday = result.randomBirthday;
+
+            // Print the results to the console
+            Console.WriteLine($"CPR: {cpr}");
+            Console.WriteLine($"Person: {randomPerson.Name}, Gender: {randomPerson.Gender}");
+            Console.WriteLine($"Birthday: {randomBirthday.ToShortDateString()}");
         }
     }
 }
