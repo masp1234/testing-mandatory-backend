@@ -3,6 +3,7 @@ using Xunit;
 
 namespace testing_mandatory_backendTests.Integration
 {
+    [Trait("Category", "Integration")]
     [Collection("Sequential")]
     public class PostalCodeRepositoryIntegrationTest: IClassFixture<TestDatabaseFixture>
     {

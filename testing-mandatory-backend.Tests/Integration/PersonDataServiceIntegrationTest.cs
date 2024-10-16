@@ -6,6 +6,7 @@ using Xunit;
 
 namespace testing_mandatory_backendTests.Integration
 {
+    [Trait("Category", "Integration")]
     [Collection("Sequential")]
     /* 
         Big bang approach - connecting this component and 

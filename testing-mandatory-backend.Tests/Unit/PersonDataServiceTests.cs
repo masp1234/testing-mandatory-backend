@@ -6,6 +6,7 @@ using Xunit;
 
 namespace testing_mandatory_backendTests.Unit
 {
+    [Trait("Category", "Unit")]
     public class PersonDataServiceTests: IClassFixture<PersonDataServiceFixture>
     {
         private readonly PersonDataServiceFixture _fixture;
