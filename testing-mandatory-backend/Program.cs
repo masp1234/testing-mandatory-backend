@@ -1,23 +1,16 @@
+// File: Program.cs
 
-namespace testing_mandatory_backend;
 using testing_mandatory_backend.Repositories;
 using testing_mandatory_backend.Services;
 using MySql.Data.MySqlClient;
 
-
-public class Program
+namespace testing_mandatory_backend
 {
-    public static void Main(string[] args)
+    public class Program
     {
-        PhoneNumberGenerator generator = new PhoneNumberGenerator();
-        try
+        public static void Main(string[] args)
         {
-            // Generate a phone number with a specific prefix
-            Console.WriteLine("Generated Phone Number: " + generator.GeneratePhoneNumber("342"));
-
             var builder = WebApplication.CreateBuilder(args);
-
-            // Add services to the container.
 
             // Load environment variables depending on the current environment
             var env = builder.Environment.EnvironmentName;
@@ -28,6 +21,8 @@ public class Program
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
 
+            // Add services to the container.
+
             // Add scoped MySQL connection (new db connection for each request)
             builder.Services.AddScoped<MySqlConnection>(serviceProvider =>
             {
@@ -37,15 +32,14 @@ public class Program
                 return connection;
             });
 
-            // Add inject PostalCodeRepository wherever it is needed
+            // Register repositories and services
             builder.Services.AddScoped<IPostalCodeRepository, PostalCodeRepository>();
-
             builder.Services.AddScoped<FakeAddressGenerator>();
-            
             builder.Services.AddScoped<INameAndGenderRepository, NameAndGenderRepository>();
-
             builder.Services.AddScoped<NameAndGenderGenerator>();
 
+            // Register the PhoneNumberGenerator service
+            builder.Services.AddScoped<IPhoneNumberGenerator, PhoneNumberGenerator>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -69,15 +63,5 @@ public class Program
 
             app.Run();
         }
-        catch (ArgumentException ex)
-        {
-            // Handle invalid prefix error
-            Console.WriteLine("Error: " + ex.Message);
-        }
-
-        // Generate multiple phone numbers in bulk
-        List<string> bulkNumbers = generator.GenerateBulkPhoneNumbers(10);
-        Console.WriteLine("Bulk Generated Numbers: ");
-        bulkNumbers.ForEach(Console.WriteLine); // Print each generated phone number
     }
 }
