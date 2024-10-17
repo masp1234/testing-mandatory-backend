@@ -47,17 +47,13 @@ jobs:
             --header "X-Api-Key: ${{ secrets.POSTMAN_API_KEY }}" \
             --output TestingMandatory.postman_collection.json
 
-      - name: List files
-        run: ls -la
-
-
       - name: Install Newman
         run: |
           npm i -g newman \
           && npm install -g newman-reporter-htmlextra
 
-      - name: Start the .NET application
-        run: dotnet run --project testing-mandatory-backend
+      - name: Start the .NET application as a background task and wait for it to start
+        run: dotnet run --project testing-mandatory-backend & sleep 15
 
       - name: Run Postman Collection
         run: |
