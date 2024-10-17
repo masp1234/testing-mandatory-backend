@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using testing_mandatory_backend.Services;
-
 namespace testing_mandatory_backend.Tests.Fixtures
 {
     public class BirthdayGeneratorFixture {

@@ -1,62 +1,67 @@
 using System;
 using Xunit;
 using testing_mandatory_backend.Services;
-using testing_mandatory_backend.Models;
+using testing_mandatory_backend.Tests.Fixtures;
 
-namespace testing_mandatory_backend.Tests
-{
+namespace testing_mandatory_backend.Tests {
     [Trait("Category", "Unit")]
-    public class CprGeneratorTests {
-        private readonly CprGenerator _cprGenerator;
+    public class CprGeneratorTests : IClassFixture<CprGeneratorFixture> {
+        private readonly CprGeneratorFixture _fixture;
 
-        public CprGeneratorTests() {
-            _cprGenerator = new CprGenerator();
+        public CprGeneratorTests(CprGeneratorFixture fixture) {
+            _fixture = fixture;
         }
 
-        /*[Fact]
+        // Testing GenerateRandomCpr method
+
+        [Fact]
         public void GenerateRandomCpr_ShouldReturnValidCpr() {
-            // Act
-            string cpr = _cprGenerator.GenerateRandomCpr();
+            foreach (var cpr in _fixture.RandomCprs) {
+                // Assert
+                Assert.Matches(@"^\d{6}\d{4}$", cpr); // Check format
 
-            // Assert
-            Assert.Matches
-            string datePart = cpr.Substring(0, 6);
-            DateTime date = DateTime.ParseExact(datePart, "ddMMyy", null);
-            DateTime startDate = DateTime.Today.AddYears(-100);
-            DateTime endDate = DateTime.Today.AddYears(-18);
+                string datePart = cpr.Substring(0, 6);
+                DateTime date = DateTime.ParseExact(datePart, "ddMMyy", null);
+                DateTime startDate = DateTime.Today.AddYears(-100);
+                DateTime endDate = DateTime.Today.AddYears(-18);
 
-            Assert.InRange(date, startDate, endDate); // Check date range
-        }*/
-
-        [Theory]
-        [InlineData("male")]
-        [InlineData("female")]
-        public void GenerateCprWithBirthdayAndGender_ShouldReturnValidCpr(string gender) {
-
-            // Act
-            var result = _cprGenerator.GenerateCprWithBirthdayAndGender(gender);
-            string cpr = result.cpr;
-            Person person = result.randomPerson;
-            DateTime birthday = result.randomBirthday;
-
-            // Assert
-            Assert.Matches(@"^\d{6}-\d{4}$", cpr); // Check format
-
-            string datePart = cpr.Substring(0, 6);
-            DateTime date = DateTime.ParseExact(datePart, "ddMMyy", null);
-
-            Assert.Equal(birthday.Date, date.Date); // Check if date part matches birthday
-
-            int lastDigit = int.Parse(cpr[^1].ToString());
-            if (gender.Equals("male", StringComparison.OrdinalIgnoreCase)) {
-                Assert.True(lastDigit % 2 != 0); // Check if last digit is odd for males
+                Assert.InRange(date, startDate, endDate); // Check date range
             }
-            else if (gender.Equals("female", StringComparison.OrdinalIgnoreCase)) {
-                Assert.True(lastDigit % 2 == 0); // Check if last digit is even for females
-            }
+        }
 
-            Assert.NotNull(person); // Check if person is not null
-            Assert.NotNull(birthday); // Check if birthday is not null
+        // Testing GenerateCprWithBirthdayAndGender method
+
+        [Fact]
+        public void GenerateCprWithBirthdayAndGender_ShouldReturnCprInCorrectFormat() {
+            foreach (var data in _fixture.RandomCprsWithGenderAndBirthday) {
+                // Assert
+                Assert.Matches(@"^\d{6}\d{4}$", data.Cpr); // Check format
+            }
+        }
+
+        [Fact]
+        public void GenerateCprWithBirthdayAndGender_ShouldMatchBirthday() {
+            foreach (var data in _fixture.RandomCprsWithGenderAndBirthday) {
+                // Assert
+                string datePart = data.Cpr.Substring(0, 6);
+                DateTime date = DateTime.ParseExact(datePart, "ddMMyy", null);
+
+                Assert.Equal(data.Birthday.Date, date.Date); // Check if date part matches birthday
+            }
+        }
+
+        [Fact]
+        public void GenerateCprWithBirthdayAndGender_ShouldHaveCorrectLastDigitForGender() {
+            foreach (var data in _fixture.RandomCprsWithGenderAndBirthday) {
+                // Assert
+                int lastDigit = int.Parse(data.Cpr[^1].ToString());
+                if (data.Gender.Equals("male", StringComparison.OrdinalIgnoreCase)) {
+                    Assert.True(lastDigit % 2 != 0); // Check if last digit is odd for males
+                }
+                else if (data.Gender.Equals("female", StringComparison.OrdinalIgnoreCase)) {
+                    Assert.True(lastDigit % 2 == 0); // Check if last digit is even for females
+                }
+            }
         }
     }
 }
