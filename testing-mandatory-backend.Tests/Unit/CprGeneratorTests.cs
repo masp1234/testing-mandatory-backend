@@ -37,10 +37,6 @@ namespace testing_mandatory_backend.Tests {
             }
         }
 
-        public void GenerateRandomCpr_ShouldNotReturnInvalidGender() {
-
-        }
-
         // Testing GenerateCprWithBirthdayAndGender method
 
         [Fact]
