@@ -277,3 +277,6 @@ __pycache__/
 ## Test reports
 CoverageReport
 TestResults
+
+## Visual Studio Code files
+.vscode

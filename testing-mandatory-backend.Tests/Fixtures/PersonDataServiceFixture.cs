@@ -25,9 +25,20 @@ public class PersonDataServiceFixture
         mockNameAndGenderGenerator.Setup(generator => generator.GenerateNameAndGender())
             .Returns(new NameAndGender("John", "Doe", "Male"));
 
+        var mockCprGenerator = new Mock<ICprGenerator>();
+        mockCprGenerator.Setup(generator => generator
+            .GenerateCprWithBirthdayAndGender(It.IsAny<DateTime>(), It.IsAny<string>()))
+            .Returns("210298-2704");
+
+        mockCprGenerator.Setup(generator => generator
+            .GenerateRandomCpr(It.IsAny<DateTime>()))
+            .Returns("210298-2704");
+
+
         PersonDataService = new(mockBirthdayGenerator.Object,
                                 mockPhoneNumberGenerator.Object,
                                 mockNameAndGenderGenerator.Object,
-                                mockFakeAddressGenerator.Object);
+                                mockFakeAddressGenerator.Object,
+                                mockCprGenerator.Object);
     }
 }

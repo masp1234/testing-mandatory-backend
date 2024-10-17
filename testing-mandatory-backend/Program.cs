@@ -46,6 +46,8 @@ public class Program
             builder.Services.AddScoped<IFakeAddressGenerator, FakeAddressGenerator>();
             builder.Services.AddScoped<IPhoneNumberGenerator, PhoneNumberGenerator>();
             builder.Services.AddScoped<IBirthdayGenerator, BirthdayGenerator>();
+            builder.Services.AddScoped<ICprGenerator, CprGenerator>();
+            builder.Services.AddScoped<IPersonDataService, PersonDataService>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
