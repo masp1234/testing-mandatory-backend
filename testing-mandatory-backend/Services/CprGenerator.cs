@@ -22,7 +22,7 @@ namespace testing_mandatory_backend.Services {
             string birthdayPart = birthday.ToString("ddMMyy");
             
             Random random = new Random();
-            int sequenceNumber = random.Next(100, 1000); // Generate a random sequence number in this range
+            int sequenceNumber = random.Next(100, 1000); // Generate a random sequence number in this range, ensuring 3 digits
 
             // Ensures the last digit is odd for males and even for females
             int lastDigit = random.Next(0, 10);
@@ -32,7 +32,7 @@ namespace testing_mandatory_backend.Services {
                 }
             }
             else if (gender.Equals("female", StringComparison.OrdinalIgnoreCase)) {
-                if (lastDigit % 2 != 0){
+                if (lastDigit % 2 != 0) {
                     lastDigit--;
                 }
             }

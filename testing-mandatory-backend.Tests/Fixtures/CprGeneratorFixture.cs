@@ -14,6 +14,7 @@ namespace testing_mandatory_backend.Tests.Fixtures {
             BirthdayGenerator BirthdayGenerator = new();
 
             for (int i = 0; i < numberOfTests; i++) {
+                // Adds a random CPR to the list
                 RandomCprs.Add(CprGenerator.GenerateRandomCpr(BirthdayGenerator.GenerateRandomBirthday()));
             }
 
