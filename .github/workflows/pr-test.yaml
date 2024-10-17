@@ -34,3 +34,32 @@ jobs:
 
       - name: Run Integration Tests
         run: dotnet test testing-mandatory-backend.Tests/testing-mandatory-backend.Tests.csproj --filter Category="Integration" --verbosity minimal
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Fetch Postman Collection
+        run: |
+          curl --request GET \
+            --url https://api.getpostman.com/collections/${{ secrets.TEST_COLLECTION_ID }} \
+            --header "X-Api-Key: ${{ secrets.POSTMAN_API_KEY }}" \
+            --output TestingMandatory.postman_collection.json
+
+
+      - name: Install Newman
+        run: |
+          npm i -g newman \
+          npm install -g newman-reporter-htmlextra
+
+      - name: Run Postman Collection
+        run: |
+          newman run TestingMandatory.postman_collection.json \
+          -r htmlextra --reporter-htmlextra-export postmanTestResults/htmlreport.html
+
+      - name: Upload Postman test results
+        uses: actions/upload-artifact@v2
+        with:
+          name: RunReports
+          path: postmanTestResults
