@@ -23,8 +23,9 @@ namespace testing_mandatory_backend.Tests {
                 string datePart = cpr.Substring(0, 6);
                 DateTime date = DateTime.ParseExact(datePart, "ddMMyy", null);
 
-                // Ensure the year is not in the future
-                // This is done because ParseExact does not check if the year is in the future
+                // Ensure the year is not in the future or present
+                // This is done because ParseExact does not check if the year is in the future between 2024-2029
+                // https://learn.microsoft.com/en-us/dotnet/api/system.globalization.calendar.twodigityearmax?view=net-8.0
                 if (date.Year >= DateTime.Today.Year) {
                     date = date.AddYears(-100);
                 }
@@ -67,6 +68,8 @@ namespace testing_mandatory_backend.Tests {
                 }
                 else if (data.Gender.Equals("female", StringComparison.OrdinalIgnoreCase)) {
                     Assert.True(lastDigit % 2 == 0); // Check if last digit is even for females
+                } else {
+                    throw new Exception("Wrong gender-input");
                 }
             }
         }
