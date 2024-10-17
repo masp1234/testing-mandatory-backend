@@ -24,6 +24,7 @@ namespace testing_mandatory_backend.Tests {
                 DateTime date = DateTime.ParseExact(datePart, "ddMMyy", null);
 
                 // Ensure the year is not in the future
+                // This is done because ParseExact does not check if the year is in the future
                 if (date.Year >= DateTime.Today.Year) {
                     date = date.AddYears(-100);
                 }
