@@ -35,6 +35,8 @@ namespace testing_mandatory_backend.Services {
                 if (lastDigit % 2 != 0) {
                     lastDigit--;
                 }
+            } else {
+                throw new Exception("Wrong gender-input");
             }
 
             // Combine the parts to form the CPR number

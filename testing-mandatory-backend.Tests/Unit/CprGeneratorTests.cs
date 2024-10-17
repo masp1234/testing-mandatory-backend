@@ -37,6 +37,10 @@ namespace testing_mandatory_backend.Tests {
             }
         }
 
+        public void GenerateRandomCpr_ShouldNotReturnInvalidGender() {
+
+        }
+
         // Testing GenerateCprWithBirthdayAndGender method
 
         [Fact]
@@ -68,10 +72,22 @@ namespace testing_mandatory_backend.Tests {
                 }
                 else if (data.Gender.Equals("female", StringComparison.OrdinalIgnoreCase)) {
                     Assert.True(lastDigit % 2 == 0); // Check if last digit is even for females
-                } else {
-                    throw new Exception("Wrong gender-input");
                 }
             }
+        }
+
+        [Fact]
+        public void GenerateCprWithBirthdayAndGender_ShouldThrowExceptionForInvalidGender() {
+            // Arrange
+            CprGenerator CprGenerator = new();
+            // Act & Assert
+            Assert.Throws<Exception>(() => {
+                CprGenerator.GenerateCprWithBirthdayAndGender(DateTime.Today.AddYears(-100), "malee");
+            });
+            Assert.Throws<Exception>(() => {
+                CprGenerator.GenerateCprWithBirthdayAndGender(DateTime.Today.AddYears(-100), "");
+            });
+                    
         }
     }
 }
