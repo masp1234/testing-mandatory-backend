@@ -60,7 +60,7 @@ jobs:
       - name: Run Postman Collection
         run: |
           newman run TestingMandatory.postman_collection.json \
-          -r htmlextra --reporter-htmlextra-export postmanTestResults/htmlreport.html --verbose
+          -r cli, htmlextra --reporter-htmlextra-export postmanTestResults/htmlreport.html --verbose
 
       - name: Upload Postman test results
         uses: actions/upload-artifact@v4
