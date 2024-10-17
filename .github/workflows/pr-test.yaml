@@ -51,7 +51,7 @@ jobs:
       - name: Install Newman
         run: |
           npm i -g newman \
-          npm install -g newman-reporter-htmlextra
+          && npm install -g newman-reporter-htmlextra
 
       - name: Run Postman Collection
         run: |
