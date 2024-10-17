@@ -2,8 +2,7 @@
 
 public class BirthdayGenerator: IBirthdayGenerator
 {
-    public DateTime GenerateRandomBirthday()
-    {
+    public DateTime GenerateRandomBirthday() {
         DateTime today = DateTime.Today;
         DateTime earliestDate = today.AddYears(-100);
         DateTime latestDate = today.AddYears(-18);
