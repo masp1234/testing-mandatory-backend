@@ -37,15 +37,15 @@ public class Program
                 return connection;
             });
 
-            // Add inject PostalCodeRepository wherever it is needed
+            // Register repositories
             builder.Services.AddScoped<IPostalCodeRepository, PostalCodeRepository>();
-
-            builder.Services.AddScoped<FakeAddressGenerator>();
-            
             builder.Services.AddScoped<INameAndGenderRepository, NameAndGenderRepository>();
 
-            builder.Services.AddScoped<NameAndGenderGenerator>();
-
+            // Register services
+            builder.Services.AddScoped<INameAndGenderGenerator, NameAndGenderGenerator>();
+            builder.Services.AddScoped<IFakeAddressGenerator, FakeAddressGenerator>();
+            builder.Services.AddScoped<IPhoneNumberGenerator, PhoneNumberGenerator>();
+            builder.Services.AddScoped<IBirthdayGenerator, BirthdayGenerator>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

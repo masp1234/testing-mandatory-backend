@@ -4,8 +4,13 @@ using testing_mandatory_backend.Services;
 using Xunit;
 
 [Trait("Category", "Integration")]
-[Collection("Database Collection")]
-public class FakeAddressGeneratorIntegrationTest
+/* 
+    Run the tests that are in the "Sequential" collection sequentially (and not in parallel)
+    This is because they share the same test database (the TestDatabaseFixture)
+    If they don't run sequentially different tests will fail at different times
+*/
+[Collection("Sequential")]
+public class FakeAddressGeneratorIntegrationTest: IClassFixture<TestDatabaseFixture>
 {
     private readonly TestDatabaseFixture _fixture;
     private readonly PostalCodeRepository _postalCodeRepository;
@@ -14,6 +19,7 @@ public class FakeAddressGeneratorIntegrationTest
     public FakeAddressGeneratorIntegrationTest(TestDatabaseFixture fixture)
     {
         _fixture = fixture;
+        _fixture.CreateNewConnection();
         _fixture.ResetDatabase();
 
         _postalCodeRepository = new(_fixture.Connection);
@@ -49,7 +55,7 @@ public class FakeAddressGeneratorIntegrationTest
     [InlineData("1111", "")]
     [InlineData("", "Glostrup")]
     [InlineData("", "")]
-    public void GenerateFakeAddress_ThrowsException_When_PostalCodeOrTownName_IsMissing(string postalCode, string townName)
+    public void GenerateFakeAddress_ThrowsException_When_PostalCodeOrTownName_IsMissing(string? postalCode, string? townName)
     {
         // Arrange
         var seedData = (postalCode, townName);
