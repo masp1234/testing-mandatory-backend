@@ -12,7 +12,7 @@ jobs:
       db:
         image: mysql:8.0
         env:
-          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
           MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
         ports:
           - 3306:3306
@@ -31,7 +31,7 @@ jobs:
 
       - name: Seed Database
         run: |
-          mysql -h 127.0.0.1 -u ${{ secrets.MYSQL_USER }} -p${{ secrets.MYSQL_ROOT_PASSWORD }} ${{ secrets.MYSQL_DATABASE }} < ./testing-mandatory-backend/Scripts/test-addresses.sql
+          mysql -h 127.0.0.1 -u ${{ secrets.MYSQL_USER }} -p${{ secrets.MYSQL_PASSWORD }} ${{ secrets.MYSQL_DATABASE }} < ./testing-mandatory-backend/Scripts/test-addresses.sql
 
       - name: Run Integration Tests
         run: dotnet test testing-mandatory-backend.Tests/testing-mandatory-backend.Tests.csproj --filter Category="Integration" --verbosity minimal
