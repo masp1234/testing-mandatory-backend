@@ -47,6 +47,9 @@ jobs:
             --header "X-Api-Key: ${{ secrets.POSTMAN_API_KEY }}" \
             --output TestingMandatory.postman_collection.json
 
+      - name: List files
+        run: ls -la
+
 
       - name: Install Newman
         run: |
