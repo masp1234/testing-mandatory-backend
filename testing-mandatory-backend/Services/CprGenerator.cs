@@ -1,19 +1,13 @@
 namespace testing_mandatory_backend.Services {
     
-    public class CprGenerator {
+    public class CprGenerator : ICprGenerator {
         
         private static readonly Random random = new Random();
 
-        public string GenerateRandomCpr() {
-            // Generates a random date that's between 18 and 100 years ago
-            // Could be simplified by just using BirthdayGenerator, but that would introduce higher coupling.
-            DateTime startDate = DateTime.Today.AddYears(-100);
-            DateTime endDate = DateTime.Today.AddYears(-18);
-            int range = (endDate - startDate).Days;
-            DateTime randomDate = startDate.AddDays(random.Next(range));
+        public string GenerateRandomCpr(DateTime birthday) {
 
             // Formats the date as ddMMyy
-            string datePart = randomDate.ToString("ddMMyy");
+            string datePart = birthday.ToString("ddMMyy");
 
             // Generate the last four random digits
             string randomDigits = random.Next(1000, 10000).ToString("D4");
@@ -49,19 +43,5 @@ namespace testing_mandatory_backend.Services {
             return cpr;
         }
 
-        /*public void PrintCprWithBirthdayAndGender(string gender) {
-            // Call the GenerateCprWithBirthdayAndGender method
-            var result = GenerateCprWithBirthdayAndGender(gender);
-
-            // Extract the values from the result
-            string cpr = result.cpr;
-            Person randomPerson = result.randomPerson;
-            DateTime randomBirthday = result.randomBirthday;
-
-            // Print the results to the console
-            Console.WriteLine($"CPR: {cpr}");
-            Console.WriteLine($"Person: {randomPerson.Name}, Gender: {randomPerson.Gender}");
-            Console.WriteLine($"Birthday: {randomBirthday.ToShortDateString()}");
-        }*/
     }
 }

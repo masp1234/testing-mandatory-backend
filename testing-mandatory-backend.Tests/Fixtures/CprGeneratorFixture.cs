@@ -11,9 +11,10 @@ namespace testing_mandatory_backend.Tests.Fixtures {
             RandomCprs = new List<string>();
             RandomCprsWithGenderAndBirthday = new List<CprData>();
             CprGenerator CprGenerator = new();
+            BirthdayGenerator BirthdayGenerator = new();
 
             for (int i = 0; i < numberOfTests; i++) {
-                RandomCprs.Add(CprGenerator.GenerateRandomCpr());
+                RandomCprs.Add(CprGenerator.GenerateRandomCpr(BirthdayGenerator.GenerateRandomBirthday()));
             }
 
             Random random = new();
@@ -22,11 +23,7 @@ namespace testing_mandatory_backend.Tests.Fixtures {
                 string gender = random.Next(0, 2) == 0 ? "Male" : "Female";
 
                 // Generate a random birthday
-                // Could be simplified by just using BirthdayGenerator, but that would introduce higher coupling.
-                DateTime startDate = DateTime.Today.AddYears(-100);
-                DateTime endDate = DateTime.Today.AddYears(-18);
-                int range = (endDate - startDate).Days;
-                DateTime randomBirthday = startDate.AddDays(random.Next(range));
+                DateTime randomBirthday = BirthdayGenerator.GenerateRandomBirthday();
 
                 // Generate a random CPR with birthday and gender
                 var result = CprGenerator.GenerateCprWithBirthdayAndGender(randomBirthday, gender);

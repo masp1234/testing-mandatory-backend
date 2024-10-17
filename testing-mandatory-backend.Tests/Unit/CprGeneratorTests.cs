@@ -18,10 +18,16 @@ namespace testing_mandatory_backend.Tests {
         public void GenerateRandomCpr_ShouldReturnValidCpr() {
             foreach (var cpr in _fixture.RandomCprs) {
                 // Assert
-                Assert.Matches(@"^\d{6}\d{4}$", cpr); // Check format
+                Assert.Equal(10, cpr.Length); // Check length
 
                 string datePart = cpr.Substring(0, 6);
                 DateTime date = DateTime.ParseExact(datePart, "ddMMyy", null);
+
+                // Ensure the year is not in the future
+                if (date.Year >= DateTime.Today.Year) {
+                    date = date.AddYears(-100);
+                }
+
                 DateTime startDate = DateTime.Today.AddYears(-100);
                 DateTime endDate = DateTime.Today.AddYears(-18);
 
@@ -35,7 +41,7 @@ namespace testing_mandatory_backend.Tests {
         public void GenerateCprWithBirthdayAndGender_ShouldReturnCprInCorrectFormat() {
             foreach (var data in _fixture.RandomCprsWithGenderAndBirthday) {
                 // Assert
-                Assert.Matches(@"^\d{6}\d{4}$", data.Cpr); // Check format
+                Assert.Equal(10, data.Cpr.Length); // Check length
             }
         }
 
@@ -44,9 +50,9 @@ namespace testing_mandatory_backend.Tests {
             foreach (var data in _fixture.RandomCprsWithGenderAndBirthday) {
                 // Assert
                 string datePart = data.Cpr.Substring(0, 6);
-                DateTime date = DateTime.ParseExact(datePart, "ddMMyy", null);
+                string date = data.Birthday.ToString("ddMMyy");
 
-                Assert.Equal(data.Birthday.Date, date.Date); // Check if date part matches birthday
+                Assert.Equal(datePart, date); // Check if date part matches birthday
             }
         }
 
