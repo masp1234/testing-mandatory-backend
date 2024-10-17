@@ -3,6 +3,7 @@ name: Pull Request Test
 on:
   pull_request:
     branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build-and-test:
@@ -12,8 +13,8 @@ jobs:
       db:
         image: mysql:8.0
         env:
-          MYSQL_ROOT_PASSWORD: 123123
-          MYSQL_DATABASE: test_addresses
+          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+          MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
         ports:
           - 3306:3306
 
@@ -30,7 +31,39 @@ jobs:
         run: dotnet test testing-mandatory-backend.Tests/testing-mandatory-backend.Tests.csproj --filter Category="Unit" --verbosity minimal
 
       - name: Seed Database
-        run: mysql -h 127.0.0.1 -u root -p123123 test_addresses < ./testing-mandatory-backend/Scripts/test-addresses.sql
+        run: |
+          mysql -h 127.0.0.1 -u ${{ secrets.MYSQL_USER }} -p${{ secrets.MYSQL_PASSWORD }} ${{ secrets.MYSQL_DATABASE }} < ./testing-mandatory-backend/Scripts/test-addresses.sql
 
       - name: Run Integration Tests
         run: dotnet test testing-mandatory-backend.Tests/testing-mandatory-backend.Tests.csproj --filter Category="Integration" --verbosity minimal
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Fetch Postman Collection
+        run: |
+          curl --request GET \
+            --url https://api.getpostman.com/collections/${{ secrets.TEST_COLLECTION_ID }} \
+            --header "X-Api-Key: ${{ secrets.POSTMAN_API_KEY }}" \
+            --output TestingMandatory.postman_collection.json
+
+      - name: Install Newman
+        run: |
+          npm i -g newman \
+          && npm install -g newman-reporter-htmlextra
+
+      - name: Start the .NET application as a background task and wait for it to start
+        run: dotnet run --project testing-mandatory-backend & sleep 15
+
+      - name: Run Postman Collection
+        run: |
+          newman run TestingMandatory.postman_collection.json \
+          -r cli,htmlextra --reporter-htmlextra-export postmanTestResults/htmlreport.html --verbose
+
+      - name: Upload Postman test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: RunReports
+          path: postmanTestResults
