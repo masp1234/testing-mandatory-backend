@@ -6,7 +6,7 @@
 
         public NameAndGender Person { get; set; }
 
-        public DateTime Birthday { get; set; }
+        public DateTime BirthDate { get; set; }
 
         public string PhoneNumber { get; set; }
 
@@ -15,14 +15,14 @@
         public PersonData(
             FakeAddress fakeAddress,
             NameAndGender person,
-            DateTime birthday,
+            DateTime birthDate,
             string phoneNumber,
             string cpr
             )
         {
             FakeAddress = fakeAddress;
             Person = person;
-            Birthday = birthday;
+            BirthDate = birthDate;
             PhoneNumber = phoneNumber;
             CPR = cpr;
 
