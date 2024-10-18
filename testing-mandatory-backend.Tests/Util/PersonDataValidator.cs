@@ -13,7 +13,7 @@ namespace testing_mandatory_backendTests.Util
              Check that Birthday has actually been set,
              and that it is not using the default value for DateTime (which is DateTime.MinValue)
             */
-            Assert.NotEqual(DateTime.MinValue, personData.Birthday);
+            Assert.NotEqual(DateTime.MinValue, personData.BirthDate);
             Assert.False(string.IsNullOrEmpty(personData.PhoneNumber));
             Assert.False(string.IsNullOrEmpty(personData.CPR));
         }
