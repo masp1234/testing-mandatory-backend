@@ -13,6 +13,23 @@ namespace testing_mandatory_backend.Controllers
             _personDataService = personDataService;
         }
 
+        [Route("api/cpr")]
+        [HttpGet]
+        public ActionResult GetCpr()
+        {
+            try
+            {
+                var cpr = _personDataService.CreateCPR();
+                return Ok(new{cpr = cpr}); 
+            }
+            catch(Exception exception)
+            {
+                Console.WriteLine(exception);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Controller: Could not create CPR.");
+            }
+        }
+
+
         [Route("api/name-gender")]
         [HttpGet]
         public ActionResult<NameAndGender> GetNameAndGender()
@@ -43,6 +60,40 @@ namespace testing_mandatory_backend.Controllers
             {
                 Console.WriteLine(exception);
                 return StatusCode(StatusCodes.Status500InternalServerError, "Controller: Could not create name, gender and birhdate.");
+            }
+        }
+
+
+        [Route("api/cpr-name-gender")]
+        [HttpGet]
+        public ActionResult<CprNameAndGender> GetCprNameAndGender()
+        {
+            try
+            {
+                var cprNameAndGender = _personDataService.CreateCprNameAndGender();
+                return Ok(cprNameAndGender); 
+            }
+            catch(Exception exception)
+            {
+                Console.WriteLine(exception);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Controller: Could not createcpr, name and gender.");
+            }
+        }
+
+        
+        [Route("api/cpr-name-gender-dob")]
+        [HttpGet]
+        public ActionResult<CprNameGenderAndBirthDate> GetCprNameGenderAndBirthDate()
+        {
+            try
+            {
+                var cprNameGenderAndBirthDate = _personDataService.CreateCprNameGenderAndBirthDate();
+                return Ok(cprNameGenderAndBirthDate); 
+            }
+            catch(Exception exception)
+            {
+                Console.WriteLine(exception);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Controller: Could not createcpr, name gender and birhdate.");
             }
         }
 

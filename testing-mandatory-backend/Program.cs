@@ -47,7 +47,6 @@ public class Program
             builder.Services.AddScoped<IBirthdayGenerator, BirthdayGenerator>();
             builder.Services.AddScoped<ICprGenerator, CprGenerator>();
             builder.Services.AddScoped<IPersonDataService, PersonDataService>();
-            builder.Services.AddScoped<IPersonDataService, PersonDataService>();
 
             builder.Services.AddControllers();
             builder.Services.AddCors(options =>
