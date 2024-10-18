@@ -49,6 +49,13 @@ jobs:
             --header "X-Api-Key: ${{ secrets.POSTMAN_API_KEY }}" \
             --output TestingMandatory.postman_collection.json
 
+      - name: Fetch Postman Environment
+        run: |
+          curl --request GET \
+          --url https://api.getpostman.com/environments/${{ secrets.TEST_ENVIRONMENT_ID }} \
+          --header "X-Api-Key: ${{ secrets.POSTMAN_API_KEY }}" \
+          --output TestingMandatory.postman_environment.json
+
       - name: Seed database
         run: |
           mysql -h 127.0.0.1 -u ${{ secrets.MYSQL_USER }} -p${{ secrets.MYSQL_PASSWORD }} ${{ secrets.MYSQL_DATABASE }} < ./testing-mandatory-backend/Scripts/addresses.sql
@@ -64,6 +71,7 @@ jobs:
       - name: Run Postman Collection
         run: |
           newman run TestingMandatory.postman_collection.json \
+          -e TestingMandatory.postman_environment.json \
           -r cli,htmlextra --reporter-htmlextra-export postmanTestResults/htmlreport.html --verbose
 
       - name: Upload Postman test results
