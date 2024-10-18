@@ -30,7 +30,7 @@ jobs:
       - name: Run Unit Tests
         run: dotnet test testing-mandatory-backend.Tests/testing-mandatory-backend.Tests.csproj --filter Category="Unit" --verbosity minimal
 
-      - name: Seed Database
+      - name: Create tables in test database
         run: |
           mysql -h 127.0.0.1 -u ${{ secrets.MYSQL_USER }} -p${{ secrets.MYSQL_PASSWORD }} ${{ secrets.MYSQL_DATABASE }} < ./testing-mandatory-backend/Scripts/test-addresses.sql
 
@@ -48,6 +48,10 @@ jobs:
             --url https://api.getpostman.com/collections/${{ secrets.TEST_COLLECTION_ID }} \
             --header "X-Api-Key: ${{ secrets.POSTMAN_API_KEY }}" \
             --output TestingMandatory.postman_collection.json
+
+      - name: Seed database
+        run: |
+          mysql -h 127.0.0.1 -u ${{ secrets.MYSQL_USER }} -p${{ secrets.MYSQL_PASSWORD }} ${{ secrets.MYSQL_DATABASE }} < ./testing-mandatory-backend/Scripts/addresses.sql
 
       - name: Install Newman
         run: |
