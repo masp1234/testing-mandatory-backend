@@ -3,6 +3,8 @@ namespace testing_mandatory_backend;
 using testing_mandatory_backend.Repositories;
 using testing_mandatory_backend.Services;
 using MySql.Data.MySqlClient;
+using Microsoft.AspNetCore.Cors;
+
 
 
 public class Program
@@ -11,6 +13,7 @@ public class Program
     {
         try
         {
+        
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
@@ -45,6 +48,16 @@ public class Program
             builder.Services.AddScoped<IPersonDataService, PersonDataService>();
 
             builder.Services.AddControllers();
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAllOrigins", builder =>
+                {
+                    builder.AllowAnyOrigin() // Allows all origins
+                           .AllowAnyMethod() // Allows all HTTP methods
+                           .AllowAnyHeader(); // Allows all headers
+                });
+            });
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -59,7 +72,7 @@ public class Program
             }
 
             app.UseHttpsRedirection();
-
+            app.UseCors("AllowAllOrigins");
             app.UseAuthorization();
 
             app.MapControllers();
