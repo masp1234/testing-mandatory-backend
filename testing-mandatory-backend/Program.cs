@@ -45,6 +45,8 @@ public class Program
             builder.Services.AddScoped<IFakeAddressGenerator, FakeAddressGenerator>();
             builder.Services.AddScoped<IPhoneNumberGenerator, PhoneNumberGenerator>();
             builder.Services.AddScoped<IBirthdayGenerator, BirthdayGenerator>();
+            builder.Services.AddScoped<ICprGenerator, CprGenerator>();
+            builder.Services.AddScoped<IPersonDataService, PersonDataService>();
             builder.Services.AddScoped<IPersonDataService, PersonDataService>();
 
             builder.Services.AddControllers();
