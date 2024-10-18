@@ -4,21 +4,24 @@ using testing_mandatory_backend.Models;
 
 namespace testing_mandatory_backend.Services
 {
-    public class PersonDataService
+    public class PersonDataService: IPersonDataService
     {
         private readonly IBirthdayGenerator _birthdayGenerator;
         private readonly IPhoneNumberGenerator _phoneNumberGenerator;
         private readonly INameAndGenderGenerator _nameAndGenderGenerator;
         private readonly IFakeAddressGenerator _fakeAddressGenerator;
+        private readonly ICprGenerator _cprGenerator;
         public PersonDataService(IBirthdayGenerator birthdayGenerator,
                                  IPhoneNumberGenerator phoneNumberGenerator,
                                  INameAndGenderGenerator nameAndGenderGenerator,
-                                 IFakeAddressGenerator fakeAddressGenerator)
+                                 IFakeAddressGenerator fakeAddressGenerator,
+                                 ICprGenerator cprGenerator)
         {
             _birthdayGenerator = birthdayGenerator;
             _phoneNumberGenerator = phoneNumberGenerator;
             _nameAndGenderGenerator = nameAndGenderGenerator;
             _fakeAddressGenerator = fakeAddressGenerator;
+            _cprGenerator = cprGenerator;
         }
 
         public List<PersonData> GenerateBulkPersonData(int amount)
@@ -45,21 +48,20 @@ namespace testing_mandatory_backend.Services
                 string phoneNumber = _phoneNumberGenerator.GeneratePhoneNumber(null);
                 FakeAddress address = _fakeAddressGenerator.GenerateFakeAddress();
                 NameAndGender person = _nameAndGenderGenerator.GenerateNameAndGender();
-                // Stubbing the CPR generator, use real generator when finished
-                // string cpr = _cprGenerator.GenerateCPR(birthday, person.Gender);
-               personData = new(
+                string cpr = _cprGenerator.GenerateCprWithBirthdayAndGender(birthday, person.Gender);
+                personData = new(
                     address,
                     person,
                     birthday,
                     phoneNumber,
-                    "temp cpr"
+                    cpr
                     );
 
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
-                throw new InvalidOperationException("Failed to generate person data.", ex);
+                throw new Exception("Failed to generate person data.", ex);
             }
             return personData;
         }
@@ -97,25 +99,24 @@ namespace testing_mandatory_backend.Services
 
         public NameGenderAndBirthDate CreateNameAndGenderAndBirthDate()
         {
-            NameAndGender nameAndGender;
-            DateTime birthDate;
+            NameGenderAndBirthDate nameGenderAndBirthdate;
             try
             {
-                nameAndGender = _nameAndGenderGenerator.GenerateNameAndGender();
-                birthDate = _birthdayGenerator.GenerateRandomBirthday();
+                NameAndGender nameAndGender = _nameAndGenderGenerator.GenerateNameAndGender();
+                DateTime birthDate = _birthdayGenerator.GenerateRandomBirthday();
+
+                nameGenderAndBirthdate = new(
+                nameAndGender.Name,
+                nameAndGender.Surname,
+                nameAndGender.Gender,
+                birthDate
+                );
             }
             catch (Exception exception)
             {
                 Console.WriteLine(exception);
                 throw new Exception("Could not create name, gender and birthdate.", exception);
             }
-
-            NameGenderAndBirthDate nameGenderAndBirthdate = new(
-                nameAndGender.Name,
-                nameAndGender.Surname,
-                nameAndGender.Gender,
-                birthDate
-                );
 
             return nameGenderAndBirthdate;
 
@@ -138,36 +139,72 @@ namespace testing_mandatory_backend.Services
 
         }
 
-        /*
+
        public string CreateCPR()
        {
            string cpr;
            try
            {
-               cpr = _cprGenerator.GenerateCPR();
+                DateTime birthday = _birthdayGenerator.GenerateRandomBirthday();
+                cpr = _cprGenerator.GenerateRandomCpr(birthday);
            }
            catch(Exception exception)
            {
                Console.WriteLine(exception);
-               throw new Exception("Could not create a CPR", exception);
+               throw new Exception("Could not create a CPR.", exception);
            }
 
-           // Use CPR generator when available
            return cpr;
        }
-      
+
         public CprNameAndGender CreateCprNameAndGender()
         {
-            // use gender to create a CPR
+            CprNameAndGender cprNameAndGender;
+            try
+            {
+                DateTime birthday = _birthdayGenerator.GenerateRandomBirthday();
+                NameAndGender nameAndGender = _nameAndGenderGenerator.GenerateNameAndGender();
+                string cpr = _cprGenerator.GenerateCprWithBirthdayAndGender(birthday, nameAndGender.Gender);
 
+                cprNameAndGender = new(
+                    nameAndGender.Name,
+                    nameAndGender.Surname,
+                    nameAndGender.Gender,
+                    cpr);
+            }
+
+            catch (Exception exception)
+            {
+                throw new Exception("Could not create cpr, name and gender.", exception);
+            }
+
+            return cprNameAndGender;
         }
 
         public CprNameGenderAndBirthDate CreateCprNameGenderAndBirthDate()
         {
-            // use gender and birthdate to create the CPR - making sure that
-            // the 4 last digits are valid in regards to the gender and that the 6 is using the birthdate
-        }
-        */
+            CprNameGenderAndBirthDate cprNameGenderAndBirthDate;
+               try
+               {
+                DateTime birthday = _birthdayGenerator.GenerateRandomBirthday();
+                NameAndGender nameAndGender = _nameAndGenderGenerator.GenerateNameAndGender();
+                string cpr = _cprGenerator.GenerateCprWithBirthdayAndGender(birthday, nameAndGender.Gender);
+
+                cprNameGenderAndBirthDate = new(
+                    nameAndGender.Name,
+                    nameAndGender.Surname,
+                    nameAndGender.Gender,
+                    birthday,
+                    cpr);
+                }
+
+                catch (Exception exception)
+                {
+                    throw new Exception("Could not create cpr, name, gender and birthdate.", exception);
+                }
+
+            return cprNameGenderAndBirthDate;
+            }
 
     }
 }
