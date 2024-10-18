@@ -9,6 +9,7 @@ namespace testing_mandatory_backendTests.Util
         {
             Assert.NotNull(personData.FakeAddress);
             Assert.NotNull(personData.Person);
+
             /*
              Check that Birthday has actually been set,
              and that it is not using the default value for DateTime (which is DateTime.MinValue)
