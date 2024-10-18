@@ -44,15 +44,15 @@ namespace testing_mandatory_backend.Services
             PersonData personData;
             try
             {
-                DateTime birthday = _birthdayGenerator.GenerateRandomBirthday();
+                DateTime birthDate = _birthdayGenerator.GenerateRandomBirthday();
                 string phoneNumber = _phoneNumberGenerator.GeneratePhoneNumber(null);
                 FakeAddress address = _fakeAddressGenerator.GenerateFakeAddress();
                 NameAndGender person = _nameAndGenderGenerator.GenerateNameAndGender();
-                string cpr = _cprGenerator.GenerateCprWithBirthdayAndGender(birthday, person.Gender);
+                string cpr = _cprGenerator.GenerateCprWithBirthdayAndGender(birthDate, person.Gender);
                 personData = new(
                     address,
                     person,
-                    birthday,
+                    birthDate,
                     phoneNumber,
                     cpr
                     );
