@@ -9,12 +9,8 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        PhoneNumberGenerator generator = new PhoneNumberGenerator();
         try
         {
-            // Generate a phone number with a specific prefix
-            Console.WriteLine("Generated Phone Number: " + generator.GeneratePhoneNumber("342"));
-
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
@@ -46,6 +42,7 @@ public class Program
             builder.Services.AddScoped<IFakeAddressGenerator, FakeAddressGenerator>();
             builder.Services.AddScoped<IPhoneNumberGenerator, PhoneNumberGenerator>();
             builder.Services.AddScoped<IBirthdayGenerator, BirthdayGenerator>();
+            builder.Services.AddScoped<IPersonDataService, PersonDataService>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -75,9 +72,6 @@ public class Program
             Console.WriteLine("Error: " + ex.Message);
         }
 
-        // Generate multiple phone numbers in bulk
-        List<string> bulkNumbers = generator.GenerateBulkPhoneNumbers(10);
-        Console.WriteLine("Bulk Generated Numbers: ");
-        bulkNumbers.ForEach(Console.WriteLine); // Print each generated phone number
+       
     }
 }

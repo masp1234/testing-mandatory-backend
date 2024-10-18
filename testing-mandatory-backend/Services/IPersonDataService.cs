@@ -15,9 +15,9 @@ namespace testing_mandatory_backend.Services
 
         public FakeAddress CreateAddress();
 
-        public string CreateCPR();
-        public CprNameAndGender CreateCprNameAndGender();
+        //public string CreateCPR();
+        //public CprNameAndGender CreateCprNameAndGender();
 
-        public CprNameGenderAndBirthDate CreateCprNameGenderAndBirthDate();
+        //public CprNameGenderAndBirthDate CreateCprNameGenderAndBirthDate();
     }
 }

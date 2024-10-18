@@ -4,7 +4,7 @@ using testing_mandatory_backend.Models;
 
 namespace testing_mandatory_backend.Services
 {
-    public class PersonDataService
+    public class PersonDataService: IPersonDataService
     {
         private readonly IBirthdayGenerator _birthdayGenerator;
         private readonly IPhoneNumberGenerator _phoneNumberGenerator;
